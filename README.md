@@ -94,7 +94,15 @@ if __name__ == "__main__":
   ]
 }
 [DEBUG] Received response: Status=200 (OK), Body:
-{"status":"success","result":{"state":"debugger_opened_success","message":"Debugger initialized successfully","executed_command":"InitDebug c://Win32Project.exe"},"timestamp":48088187}
+{
+  "status": "success",
+  "result": {
+    "state": "debugger_opened_success",
+    "message": "Debugger initialized successfully",
+    "executed_command": "InitDebug c://Win32Project.exe"
+  },
+  "timestamp": 48088187
+}
 [DEBUG] HTTP connection closed
 The program has successfully started. Please wait for 3 seconds to retrieve the register ..
 [DEBUG][Debugger] Converted single register input to list: ['eip']
