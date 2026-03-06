@@ -143,6 +143,26 @@ LyScript 内置 132 个标准化 API 接口，覆盖：
 
 让安全研究人员从重复、繁琐的手动分析中解放，真正实现AI + 逆向工程的深度融合。
 
+切换到`LyScript/mcp`目录下，并执行`python main.py`运行`MCP Server`服务端。
+
+<img width="1222" height="509" alt="image" src="https://github.com/user-attachments/assets/0f148513-1c9b-45ed-b0c4-72fe7b38b41a" />
+
+打开`Cherry Studio`工具，在菜单中配置`MCP`服务器地址及端口信息，并打开`MCP`开关，如下图。
+
+<img width="1452" height="1002" alt="image" src="https://github.com/user-attachments/assets/a4960c5a-1f9b-4f80-9d56-5d714bf195fd" />
+
+配置大模型，选择深度求索大模型，并开启。
+
+<img width="1450" height="1004" alt="image" src="https://github.com/user-attachments/assets/050ca08e-bbac-4938-abd1-9a01d418ace8" />
+
+选择MCP及大模型，并设置如下。
+
+<img width="1454" height="1002" alt="image" src="https://github.com/user-attachments/assets/76b364b5-b9d6-4c6b-85dc-e72d8feb6b22" />
+
+最后就可以对大模型进行提问，例如打开`d://pec/win32.exe`并简单分析。
+
+<img width="2042" height="1081" alt="image" src="https://github.com/user-attachments/assets/a7bdbff1-612f-4a2b-ac20-7e9d3ccf747c" />
+
 ### 📄 适用场景
 
  - 漏洞利用开发与验证
