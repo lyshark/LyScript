@@ -116,9 +116,27 @@ The program has successfully started. Please wait for 3 seconds to retrieve the 
   ]
 }
 [DEBUG] Received response: Status=200 (OK), Body:
-{"status":"success","result":{"message":"Register value retrieved successfully","register_name":"EIP","register_index":30,"value_decimal":2005106953,"value_hex":"0x77838109","platform":"x86"},"timestamp":48091187}
+{
+  "status": "success",
+  "result": {
+    "message": "Register value retrieved successfully",
+    "register_name": "EIP",
+    "register_index": 30,
+    "value_decimal": 2005106953,
+    "value_hex": "0x77838109",
+    "platform": "x86"
+  },
+  "timestamp": 48091187
+}
 [DEBUG] HTTP connection closed
-{'message': 'Register value retrieved successfully', 'register_name': 'EIP', 'register_index': 30, 'value_decimal': 2005106953, 'value_hex': '0x77838109', 'platform': 'x86'}
+{
+  "message": "Registervalueretrievedsuccessfully",
+  "register_name": "EIP",
+  "register_index": 30,
+  "value_decimal": 2005106953,
+  "value_hex": "0x77838109",
+  "platform": "x86"
+}
 ```
 
 ### 🧠 AI 赋能与 MCP 能力
