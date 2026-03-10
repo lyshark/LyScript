@@ -1,0 +1,8 @@
+LICENSE
+README.md
+setup.py
+x64dbg/__init__.py
+x64dbg.egg-info/PKG-INFO
+x64dbg.egg-info/SOURCES.txt
+x64dbg.egg-info/dependency_links.txt
+x64dbg.egg-info/top_level.txt
