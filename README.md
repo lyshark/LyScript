@@ -1,16 +1,17 @@
-# LYSCRIPT 动态调试分析组件
+# LYSCRIPT Dynamic Debugging and Analysis Component
 
 <img width="20%" height="10%" alt="logo" src="https://github.com/user-attachments/assets/5b1af7e5-4216-4a6b-9c87-1bb0b876aa71" />
 
-LyScript 是一款专为 x32/x64dbg 调试器深度定制的自动化调试与逆向分析插件，以 Python 为核心构建高效调试脚本，为安全研究人员、漏洞开发者与恶意软件分析人员提供轻量化、可编程、高扩展的调试能力。插件依托 Python 生态的强大灵活性，结合调试器原生能力，实现无第三方依赖、开箱即用，同时支持调用 x64dbg 原生脚本与自定义组合函数，可大幅提升漏洞利用开发、漏洞挖掘、样本分析、逆向工程等场景的工作效率。
+LyScript is an automated debugging and reverse analysis plugin deeply customized for the x32/x64dbg debugger. It builds efficient debugging scripts with Python as its core, providing lightweight, programmable, and highly scalable debugging capabilities for security researchers, vulnerability developers, and malware analysts. Leveraging the powerful flexibility of the Python ecosystem and combining with the native capabilities of the debugger, the plugin achieves out-of-the-box functionality without relying on third-party dependencies. It also supports calling native scripts of x64dbg and custom combination functions, significantly enhancing work efficiency in scenarios such as vulnerability exploitation development, vulnerability mining, sample analysis, and reverse engineering.
 
-## 快速安装
+## Quick Installation
 
-这款自动化控制插件专为x64dbg调试器设计，专注于满足安全行业的需求，插件采用通用化接口设计，支持直接通过 POSTMAN、HTTP、MCP 协议调用，更可无缝对接各类大模型，将 AI 能力注入调试流程，实现自动化逆向、智能断点分析、二进制漏洞检测、恶意行为溯源等高级能力，真正释放大模型在底层调试领域的潜能，为安全逆向研究提供高效、智能、自动化的新一代技术支撑。
+This automated control plugin is specifically designed for the x64dbg debugger, focusing on meeting the needs of the security industry. The plugin adopts a universal interface design, supporting direct calls through POSTMAN, HTTP, and MCP protocols. It can also seamlessly integrate with various large models, injecting AI capabilities into the debugging process to achieve advanced capabilities such as automated reverse engineering, intelligent breakpoint analysis, binary vulnerability detection, and malicious behavior tracing. This truly unleashes the potential of large models in the field of low-level debugging, providing efficient, intelligent, and automated new-generation technical support for security reverse engineering research.
 
-在使用插件进行后续操作之前，您需要下载相应版本的`x64dbg`调试器，并将压缩的`LyScript`插件文件放入到调试器的`plugins`目录下，安装时根据所使用的调试器位数选择相应的插件。
+Before using the plugin for subsequent operations, you need to download the corresponding version of the `x64dbg` debugger and place the compressed `LyScript` plugin file into the `plugins` directory of the debugger. During installation, select the appropriate plugin based on the bitness of the debugger being used.
 
-其次，需要安装相应版本的Python包，打开终端并输入`pip install x32dbg`进行安装；如果是64位系统，则需要执行`pip install x64dbg`进行安装。
+Secondly, you need to install the corresponding version of the Python package. Open the terminal and enter `pip install x32dbg` to proceed with the installation. If you are using a 64-bit system, you should execute `pip install x64dbg` instead.
+
 ```bash
 Microsoft Windows [12.0.0.0]
 (c) 2025 Microsoft Corporation。
@@ -36,7 +37,8 @@ x32dbg             2.0.0
 x64dbg             2.0.0
 ```
 
-一切准备就绪后，运行`x32dbg`调试器并等待插件成功加载。打开Python控制台，导入所需的模块，创建配置对象来指定服务地址和端口（默认为127.0.0.1:8000），并调用功能接口。
+After everything is ready, run the `x32dbg` debugger and wait for the plugin to load successfully. Open the Python console, import the required modules, create a configuration object to specify the service address and port (default is 127.0.0.1:8000), and call the functional interface.
+
 ```python
 > python
 Python 3.13.7 (tags/v3.13.7:bcee1c3, Aug 14 2025, 14:15:11) on win32
@@ -111,30 +113,30 @@ True
 }
 ```
 
-最后，将返回一个包含寄存器名称、值（十进制/十六进制）和其他信息的字典结果。调试日志可以追踪交互细节。
+Finally, a dictionary result containing register names, values (decimal/hexadecimal), and other information will be returned. Debug logs can track interaction details.
 
-## 接口规范
+## Interface Specification
 
-该组件基于`x64dbg`标准 `C++ SDK` 开发工具包进行封装，核心围绕逆向工程和调试需求展开，并按照功能属性系统性归档为八大模块：
+This component is encapsulated based on the `x64dbg` standard `C++ SDK` development toolkit, with its core centered around reverse engineering and debugging requirements. It is systematically categorized into eight modules according to functional attributes:
 
- - Debugger（调试器）
- - Register（寄存器）
- - Dissassembly（反汇编）
- - Memory（内存）
- - Module（模块）
- - Process（进程）
- - Script（脚本）
- - Gui（图形化）
+ - Debugger
+ - Register
+ - Dissassembly
+ - Memory
+ - Module
+ - Process
+ - Script
+ - GUI (Graphical User Interface)
 
-每个模块下均涵盖数十项接口能力，包括程序执行/暂停/单步调试的调试控制、断点管理、寄存器和标志操作、指令反汇编和机器码汇编、模块进程信息管理、内存读写扫描和保护属性修改、自动化脚本批量执行，以及地址标注和GUI日志输出的交互式增强。
+Each module encompasses dozens of interface capabilities, including debugging control for program execution/pause/single-step debugging, breakpoint management, register and flag operations, instruction disassembly and machine code assembly, module process information management, memory read-write scanning and protection attribute modification, automated script batch execution, as well as interactive enhancements for address annotation and GUI log output.
 
-### 调试器接口
+### Debugger Interface
 
-软件调试在计算机安全、二进制文件安全和漏洞挖掘中发挥着至关重要的作用，它有助于发现并修复软件中的安全漏洞、缺陷和潜在的攻击面。插件提供了多种调试接口，这些接口对于自动化测试至关重要。掌握这些接口的使用至关重要。本指南将涵盖调试初始化、执行操作和设置断点等方面。
+Software debugging plays a crucial role in computer security, binary file security, and vulnerability exploitation. It helps to identify and fix security vulnerabilities, defects, and potential attack surfaces in software. Plugins provide various debugging interfaces, which are essential for automated testing. Mastering the use of these interfaces is crucial. This guide will cover aspects such as debugging initialization, execution operations, and setting breakpoints.
 
 #### OpenDebug
 
-通过传入可执行文件路径来初始化调试器，并将其附加到目标程序以启动调试会话。成功后，返回一个包含调试器状态、提示信息和已执行命令的字典；失败时，返回false。
+Initialize the debugger by passing in the executable file path and attach it to the target program to start the debugging session. Upon success, a dictionary containing debugger status, prompt information, and executed commands is returned; upon failure, false is returned.
 
 ```python
 >>> debugger.OpenDebug("d://test.exe")
@@ -148,7 +150,7 @@ Return value of interface function (JSON):
 
 #### DetachDebug
 
-断开调试器与目标程序的连接，但保留调试器实例。若成功，则返回一个包含分离状态和提示信息的字典；若失败，则返回False。
+Detach the debugger from the target program, but keep the debugger instance. If upon success, a dictionary containing detach status and prompt information is returned; upon failure, False is returned.
 
 ```python
 >>> debugger.DetachDebug()
@@ -161,7 +163,7 @@ Return value of interface function (JSON):
 
 #### CloseDebug
 
-关闭调试器实例并释放相关资源。若成功，则返回一个包含关闭状态和提示信息的字典；若失败，则返回false。
+Close the debugger instance and release related resources. If upon success, a dictionary containing close status and prompt information is returned; upon failure, False is returned.
 
 ```python
 >>> debugger.CloseDebug()
@@ -174,7 +176,7 @@ Return value of interface function (JSON):
 
 #### IsDebugger
 
-检查调试器是否处于活动状态。若成功，则返回一个包含调试器活动状态和提示信息的字典；若失败，则返回False。
+Check if the debugger is active. If upon success, a dictionary containing debugger active status and prompt information is returned; upon failure, False is returned.
 
 ```python
 >>> debugger.IsDebugger()
@@ -187,7 +189,7 @@ Return value of interface function (JSON):
 
 #### IsRunningLocked
 
-检查调试器是否在锁定状态下运行。若成功，则返回一个包含锁定运行状态和提示信息的字典；若失败，则返回False。
+Check if the debugger is running in a locked state. If upon success, a dictionary containing locked running status and prompt information is returned; upon failure, False is returned.
 
 ```python
 >>> debugger.IsRunningLocked()
@@ -200,7 +202,7 @@ Return value of interface function (JSON):
 
 #### IsRunning
 
-检查调试器当前是否正在运行。若成功，则返回一个包含运行状态和提示信息的字典；若失败，则返回False。
+Check if the debugger is running. If upon success, a dictionary containing running status and prompt information is returned; upon failure, False is returned.
 
 ```python
 >>> debugger.IsRunning()
@@ -213,7 +215,7 @@ Return value of interface function (JSON):
 
 #### Wait
 
-将调试器置于等待状态。若成功，则返回一个包含等待状态和提示信息的字典；若失败，则返回False。
+Place the debugger in a wait state. If upon success, a dictionary containing wait status and prompt information is returned; upon failure, False is returned.
 
 ```python
 >>> debugger.Wait()
@@ -226,7 +228,7 @@ Return value of interface function (JSON):
 
 #### Run
 
-启动调试器进行运行。若运行成功，则返回一个包含运行状态和提示信息的字典；若运行失败，则返回False。
+Start the debugger to run the program. If upon success, a dictionary containing run status and prompt information is returned; upon failure, False is returned.
 
 ```python
 >>> debugger.Run()
@@ -239,7 +241,7 @@ Return value of interface function (JSON):
 
 #### Pause
 
-暂停调试器的运行。若成功，则返回一个包含暂停状态和提示信息的字典；若失败，则返回False。
+Pause the debugger from running the program. If upon success, a dictionary containing pause status and prompt information is returned; upon failure, False is returned.
 
 ```python
 >>> debugger.Pause()
@@ -252,7 +254,7 @@ Return value of interface function (JSON):
 
 #### Stop
 
-停止调试器的运行。若成功，则返回一个包含停止状态和提示信息的字典；若失败，则返回False。
+Stop the debugger from running the program. If upon success, a dictionary containing stop status and prompt information is returned; upon failure, False is returned.
 
 ```python
 >>> debugger.Stop()
@@ -265,7 +267,7 @@ Return value of interface function (JSON):
 
 #### StepIn
 
-执行单步输入操作（输入当前指令调用的函数）。若成功，则返回一个包含单步输入状态和提示信息的字典；若失败，则返回False。
+Execute a step-in operation (input the function called by the current instruction). If upon success, a dictionary containing step-in status and prompt information is returned; upon failure, False is returned.
 
 ```python
 >>> debugger.StepIn()
@@ -278,7 +280,7 @@ Return value of interface function (JSON):
 
 #### StepOut
 
-执行一步操作（从当前功能到返回位置）。若操作成功，则返回一个包含一步操作状态和提示信息的字典；若操作失败，则返回false。
+Execute a step-out operation (from the current function to the return position). If upon success, a dictionary containing step-out status and prompt information is returned; upon failure, False is returned.
 
 ```python
 >>> debugger.StepOut()
@@ -291,7 +293,7 @@ Return value of interface function (JSON):
 
 #### StepOver
 
-执行单步跳转操作（执行当前指令，若当前指令为函数，则直接执行整个函数）。若操作成功，则返回一个包含单步跳转状态和提示信息的字典；若操作失败，则返回false。
+Execute a step-over operation (execute the current instruction, if it is a function, execute the entire function). If upon success, a dictionary containing step-over status and prompt information is returned; upon failure, False is returned.
 
 ```python
 >>> debugger.StepOver()
@@ -304,7 +306,7 @@ Return value of interface function (JSON):
 
 #### ShowBreakPoint
 
-获取当前调试器中设置的所有断点的详细信息，包括断点类型、地址、状态、模块等。若成功，则返回一个字典，其中包含断点列表、断点总数以及操作结果信息。若失败，则返回false。
+Get the detailed information of all breakpoints set in the debugger, including breakpoint type, address, status, module, etc.
 
 ```python
 >>> debugger.ShowBreakPoint()
@@ -355,7 +357,7 @@ Return value of interface function (JSON):
 
 #### SetBreakPoint
 
-通过传入内存地址（支持十六进制字符串格式，如“0x77BB80C9”）来设置断点，以便在调试期间在指定位置暂停程序执行。若操作成功，则返回一个字典，其中包含操作结果、断点地址（十六进制）和对应的十进制值；若操作失败，则返回False。
+Set a breakpoint at the specified memory address. If upon success, a dictionary containing breakpoint address (hexadecimal) and corresponding decimal value is returned; upon failure, False is returned.
 
 ```python
 >>> eip = debugger.get_register("eip")
@@ -381,7 +383,7 @@ Return value of interface function (JSON):
 
 #### DeleteBreakPoint
 
-通过传入目标断点的内存地址（支持十六进制字符串格式，如“0x77BB80C9”），删除该地址处的断点。若删除成功，则返回一个包含删除结果、目标地址和对应十进制值的字典。若删除失败（即目标地址处无断点），则返回False。
+Delete a breakpoint at the specified memory address. If upon success, a dictionary containing delete result, target address, and corresponding decimal value is returned; upon failure, False is returned.
 
 ```python
 >>> debugger.DeleteBreakPoint("0x77BB80C9")
@@ -395,7 +397,7 @@ Return value of interface function (JSON):
 
 #### SetHardwareBreakPoint
 
-通过传入目标内存地址（支持十六进制字符串格式，如“0x77BB80C9”）和硬件断点类型值，设置特定类型的硬件断点（基于CPU调试寄存器）。设置成功后，返回一个包含设置结果、断点类型描述、类型值、目标地址和对应十进制值的字典。如果设置失败，则返回False。
+Set a hardware breakpoint at the specified memory address. If upon success, a dictionary containing set result, breakpoint type description, type value, target address, and corresponding decimal value is returned; upon failure, False is returned.
 
 ```python
 >>> debugger.SetHardwareBreakPoint("0x77BB80C9",1)
@@ -421,7 +423,7 @@ Return value of interface function (JSON):
 
 #### DeleteHardwareBreakPoint
 
-通过传入目标硬件断点的内存地址（支持十六进制字符串格式，如“0x77BB80C9”），删除已在该地址设置的硬件断点（基于CPU调试寄存器实现）。若操作成功，则返回一个包含删除结果、目标地址和对应十进制值的字典。若操作失败（即目标地址处无硬件断点），则返回False。
+Delete a hardware breakpoint at the specified memory address. If upon success, a dictionary containing delete result, target address, and corresponding decimal value is returned; upon failure, False is returned.
 
 ```python
 >>> debugger.DeleteHardwareBreakPoint("0x77BB80C9")
@@ -435,7 +437,7 @@ Return value of interface function (JSON):
 
 #### CheckBreakPoint
 
-通过传入目标断点的内存地址（支持十六进制字符串格式，如“0x77BB80C9”），检查该地址处的断点是否已被触发，并返回当前指令指针（EIP）与目标地址之间的比较信息。若成功，则返回一个字典，其中包含断点触发状态、目标地址、当前EIP值以及其他信息；若失败，则返回False。
+Check if a breakpoint at the specified memory address has been triggered. If upon success, a dictionary containing breakpoint hit status, target address, current EIP value, and other information is returned; upon failure, False is returned.
 
 ```python
 >>> debugger.CheckBreakPoint("0x77BB80C9")
@@ -463,7 +465,7 @@ Return value of interface function (JSON):
 
 #### CheckBreakPointDisable
 
-传入目标地址（支持十六进制字符串格式，如“0x77BB80C9”），检查该地址的断点是否已禁用。如果该地址没有断点或断点已启用，则返回“未禁用”状态；只有当该地址有断点且已禁用时，才返回“已禁用”状态。成功时，返回一个包含禁用状态、目标地址、提示信息和结果描述的字典；失败时，返回False。
+Check if a breakpoint at the specified memory address is disabled. If upon success, a dictionary containing disable status, target address, hint, and message is returned; upon failure, False is returned.
 
 ```python
 >>> debugger.CheckBreakPointDisable("0x77BB80C9")
@@ -489,7 +491,7 @@ Return value of interface function (JSON):
 
 #### CheckBreakPointType
 
-通过传入目标断点的内存地址（支持十六进制字符串格式，如“0x77BB80C9”），查询该地址处的断点具体类型（如软件断点、硬件断点）。若查询成功，则返回一个字典，其中包含断点类型值、类型描述、目标地址以及操作结果。若查询失败（即目标地址处无断点），则返回False。
+Check the breakpoint type at the specified memory address. If upon success, a dictionary containing breakpoint type value, type description, target address, and operation result is returned; upon failure, False is returned.
 
 ```python
 >>> debugger.CheckBreakPointType("0x77BB80C9")
@@ -513,38 +515,38 @@ Return value of interface function (JSON):
 }
 ```
 
-### 寄存器接口
+### Register Interface
 
-插件提供了标准化的API用于访问和修改寄存器值。这些API接口封装了访问寄存器的操作，允许用户直接使用这些函数来读取和修改寄存器值。
+The plug-in provides standardized APIs for accessing and modifying register values. These API interfaces encapsulate the operations of accessing registers, allowing users to directly use these functions to read and modify register values.
 
 #### get_register
 
-通过传入寄存器名称来读取对应通用寄存器的参数，该功能支持调试寄存器（如DR0-DR7）、x86通用寄存器及其变体（如EAX/AX/AH/AL等）、特殊寄存器（如CIP、CFLAGS等）以及64位专用寄存器（如R8-R15及其变体）。若操作成功，则返回一个包含寄存器名称、值（十进制/十六进制）、平台及其他信息的字典。若操作失败，则返回False。
+By passing in the register name, the function reads the parameters of the corresponding general-purpose register. This function supports debugging registers (such as DR0-DR7), x86 general-purpose registers and their variants (such as EAX/AX/AH/AL), special registers (such as CIP, CFLAGS), and 64-bit specific registers (such as R8-R15 and their variants). If the operation is successful, a dictionary containing the register name, value (decimal/hexadecimal), platform, and other information is returned. If the operation fails, False is returned.
 
-此方法的可用寄存器范围包括以下内容：
+Available registers for this method include:
 
- - DR0、DR1、DR2、DR3、DR6、DR7
- - EAX、AX、AH、AL
- - EBX、BX、BH、BL
- - ECX、CX、CH、CL
- - EDX、DX、DH、DL
- - EDI，DI
+ - DR0, DR1, DR2, DR3, DR6, DR7
+ - EAX, AX, AH, AL
+ - EBX, BX, BH, BL
+ - ECX, CX, CH, CL
+ - EDX, DX, DH, DL
+ - EDI, DI
  - ESI, SI
- - EBP，BP
+ - EBP, BP
  - ESP, SP
- - EIP、RAX、RBX、RCX、RDX、RSI、SIL、RDI、DIL、RBP、BPL、RSP、SPL、RIP
- - CIP、CSP、CAX、CBX、CCX、CDX、CDI、CSI、CBP、CFLAGS
+ - EIP, RAX, RBX, RCX, RDX, RSI, SIL, RDI, DIL, RBP, BPL, RSP, SPL, RIP
+ - CIP, CSP, CAX, CBX, CCX, CDX, CDI, CSI, CBP, CFLAGS
 
-对于64位系统，已添加以下寄存器集：
+For 64-bit systems, the following register sets are added:
 
- - R8、R8D、R8W、R8B
- - R9、R9D、R9W、R9B
- - R10、R10D、R10W、R10B
- - R11、R11D、R11W、R11B
- - R12、R12D、R12W、R12B
- - R13、R13D、R13W、R13B
- - R14、R14D、R14W、R14B
- - R15、R15D、R15W、R15B
+ - R8, R8D, R8W, R8B
+ - R9, R9D, R9W, R9B
+ - R10, R10D, R10W, R10B
+ - R11, R11D, R11W, R11B
+ - R12, R12D, R12W, R12B
+ - R13, R13D, R13W, R13B
+ - R14, R14D, R14W, R14B
+ - R15, R15D, R15W, R15B
 
 ```python
 >>> eax = debugger.get_register("eax")
@@ -582,7 +584,7 @@ Return value of interface function (JSON):
 
 #### set_register
 
-通过传入寄存器名称和值（支持十进制和十六进制格式），可以设置相应通用寄存器的参数。该功能支持调试寄存器（如DR0-DR7）、x86通用寄存器及其变体（如EAX/AX/AH/AL等）、特殊寄存器（如CIP、CFLAGS等）以及64位专用寄存器（如R8-R15及其变体）。操作成功时，将返回一个包含寄存器名称、设置值（十进制/十六进制）、平台和其他信息的字典。操作失败时，将返回false。
+By passing in the register name and value (supporting decimal and hexadecimal formats), you can set the parameters of the corresponding general-purpose register. This function supports debugging registers (such as DR0-DR7), x86 general-purpose registers and their variants (such as EAX/AX/AH/AL), special registers (such as CIP, CFLAGS), and 64-bit specific registers (such as R8-R15 and their variants). If the operation is successful, a dictionary containing the register name, set value (decimal/hexadecimal), platform, and other information is returned. If the operation fails, false is returned.
 
 ```python
 >>> eax = debugger.get_register("eax")
@@ -617,11 +619,18 @@ Return value of interface function (JSON):
 
 #### get_flag_register
 
-通过传入标志寄存器的名称来读取对应标志寄存器的状态，支持x86/x64架构中常用的标志寄存器（如ZF、PF、SF等）。若读取成功，则返回一个包含标志状态（是否已设置）、标志名称、索引、描述、平台和其他信息的字典。若读取失败，则返回false。
+By passing in the name of the flag register, read the status of the corresponding flag register. It supports commonly used flag registers in x86/x64 architectures (such as ZF, PF, SF, etc.). If the reading is successful, a dictionary containing the flag status (whether it has been set), flag name, index, description, platform, and other information is returned. If the reading fails, false is returned.
 
-此方法可用的标志寄存器范围包括以下内容：
+Available flag registers for this method include:
 
-ZF（零标志）：将结果设置为零 PF（奇偶校验标志）：当结果中1的个数为偶数时设置 SF（符号标志）：当结果为负数（最高位为1）时设置 CF（进位标志）：当无符号运算产生进位或借位时设置 OF（溢出标志）：当有符号运算结果超出表示范围时设置 AF（辅助进位标志）：当从低位4位到高位4位执行进位或借位运算时设置 DF（方向标志）：控制字符串操作指令的方向，当设置为1时，从高地址向低地址处理 IF（中断启用标志）：当设置为1时，允许CPU响应可屏蔽中断
+ZF (Zero Flag): Set when the result is zero
+PF (Parity Flag): Set when the number of 1s in the result is even
+SF (Sign Flag): Set when the result is negative (highest bit is 1)
+CF (Carry Flag): Set when an unsigned operation produces a carry or borrow
+OF (Overflow Flag): Set when a signed operation result exceeds the representable range
+AF (Auxiliary Carry Flag): Set when a carry or borrow occurs from the lower 4 bits to the upper 4 bits
+DF (Direction Flag): Controls the direction of string operation instructions. When set to 1, processing is from high address to low address
+IF (Interrupt Enable Flag): When set to 1, allows the CPU to respond to maskable interrupts
 
 ```python
 >>> zf = debugger.get_flag_register("zf")
@@ -649,7 +658,7 @@ ZF（零标志）：将结果设置为零 PF（奇偶校验标志）：当结果
 
 #### set_flag_register
 
-通过传入标志寄存器的名称和设置值（1表示设置标志，0表示清除标志），可以修改相应标志寄存器的状态。它支持x86/x64架构中常用的标志寄存器（如OF、TF、ZF等）。操作成功后，将返回一个包含操作结果、标志名称、索引、描述、当前状态、设置值、平台等信息在内的字典。如果操作失败，将返回false。
+By passing in the name of the flag register and the set value (1 means set the flag, 0 means clear the flag), you can modify the status of the corresponding flag register. It supports commonly used flag registers in x86/x64 architectures (such as OF, TF, ZF, etc.). After successful operation, a dictionary containing operation result, flag name, index, description, current status, set value, platform, and other information is returned. If the operation fails, false is returned.
 
 ```python
 >>> zf = debugger.set_flag_register("of",1)
@@ -677,13 +686,13 @@ ZF（零标志）：将结果设置为零 PF（奇偶校验标志）：当结果
 }
 ```
 
-### 反汇编接口
+### Disassembly Interface
 
-反汇编是将机器代码或编译后的二进制文件转换回人类可读的汇编代码的过程。汇编代码是一种低级语言，更接近计算机硬件指令，与机器代码相比，更容易理解和分析。通过反汇编，程序员可以了解程序的内部工作原理，诊断问题，进行逆向工程等。反汇编可用于对编译后的程序进行分析、修改、优化等操作，是软件逆向工程和安全研究中的重要工具之一。
+Disassembly is the process of converting machine code or compiled binary files back into human-readable assembly code. Assembly code is a low-level language closer to computer hardware instructions, making it easier to understand and analyze compared to machine code. Through disassembly, programmers can understand the internal working principles of a program, diagnose problems, perform reverse engineering, etc. Disassembly can be used for analyzing, modifying, and optimizing compiled programs, and is one of the important tools in software reverse engineering and security research.
 
 #### DisasmOneCode
 
-通过传入目标内存地址（支持十六进制字符串格式，如“0x77BB80C9”），对该地址的单条机器指令进行反汇编，以获取指令内容和长度等详细信息。若反汇编成功，则返回一个包含反汇编结果、地址信息、指令属性和平台的字典。若反汇编失败（如地址无效或无有效指令），则返回False。
+By passing in the target memory address (supporting hexadecimal string format, such as "0x77BB80C9"), disassemble the single machine instruction at that address to obtain detailed information such as instruction content and length. If disassembly is successful, a dictionary containing disassembly results, address information, instruction attributes, and platform is returned. If disassembly fails (e.g., invalid address or no valid instruction), False is returned.
 
 ```python
 >>> disassembly.DisasmOneCode("0x77BB80C9")
@@ -701,7 +710,7 @@ Return value of interface function (JSON):
 
 #### DisasmCountCode
 
-通过传入起始内存地址（支持十六进制字符串格式，如“0x77BB80C9”）和要反汇编的指令数量（整数），从起始地址开始批量反汇编连续的机器指令，获取每条指令的地址、内容和长度等详细信息。成功时，返回一个包含批量反汇编结果、请求/实际指令数量、起始地址和指令列表的字典。失败时，如果起始地址无效且后续地址没有有效指令，则返回false。
+By passing in the starting memory address (supporting hexadecimal string format, such as "0x77BB80C9") and the number of instructions to disassemble (integer), batch disassemble consecutive machine instructions starting from the starting address to obtain detailed information such as address, content, and length of each instruction. On success, returns a dictionary containing batch disassembly results, requested/actual instruction counts, starting address, and instruction list. On failure, returns false if the starting address is invalid and there are no valid instructions at subsequent addresses.
 
 ```python
 >>> disassembly.DisasmCountCode("0x77BB80C9",3)
@@ -741,7 +750,7 @@ Return value of interface function (JSON):
 
 #### DisasmOperand
 
-通过传入目标指令的内存地址（支持十六进制字符串格式，如“0x77BB80C9”），获取该地址处机器指令操作数的详细信息（如操作数值、大小和对应的指令内容）。若成功，则返回一个包含操作数信息、指令地址、指令内容和平台的字典。若失败，则返回false（如地址无效、指令无操作数或解析失败）。
+By passing in the memory address of the target instruction (supporting hexadecimal string format, such as "0x77BB80C9"), obtain detailed information about the operand of the machine instruction at that address (such as operand value, size, and corresponding instruction content). If successful, returns a dictionary containing operand information, instruction address, instruction content, and platform. If failed, returns false (e.g., invalid address, instruction has no operand, or parsing failure).
 
 ```python
 >>> disassembly.DisasmOperand("0x77BB80C9")
@@ -760,7 +769,7 @@ Return value of interface function (JSON):
 
 #### DisasmFastAtFunction
 
-通过传入目标指令的内存地址（支持十六进制字符串格式，如“0x77BB80C9”），可以快速获取该地址机器指令的核心属性（包括指令大小、是否为分支/调用指令、指令类型枚举等），而无需完整的反编译上下文来获取关键指令特征。成功时，返回一个包含指令属性、地址信息、指令内容和平台的字典。失败时，如果地址无效或指令无法解析，则返回false。
+By passing in the memory address of the target instruction (supporting hexadecimal string format, such as "0x77BB80C9"), you can quickly obtain the core attributes of the machine instruction at that address (including instruction size, whether it is a branch/call instruction, instruction type enumeration, etc.) without requiring complete decompilation context to obtain key instruction features. On success, returns a dictionary containing instruction attributes, address information, instruction content, and platform. On failure, returns false if the address is invalid or the instruction cannot be parsed.
 
 ```python
 >>> disassembly.DisasmFastAtFunction("0x77BB80C9")
@@ -782,7 +791,7 @@ Return value of interface function (JSON):
 
 #### GetOperandSize
 
-通过传入目标指令的内存地址（支持十六进制字符串格式，如“0x77BB80C9”），获取该地址处机器指令的机器码字节长度（注意：虽然方法名中包含“Operand”，但其实际功能是读取指令的总长度，而非仅操作数的长度）。若成功，则返回一个包含指令长度、地址信息、对应指令内容以及平台的字典。若失败（地址无效或无有效指令），则返回False。
+By passing in the memory address of the target instruction (supporting hexadecimal string format, such as "0x77BB80C9"), obtain the machine code byte length of the machine instruction at that address (Note: Although the method name contains "Operand", its actual function is to read the total length of the instruction, not just the operand length). If successful, returns a dictionary containing instruction length, address information, corresponding instruction content, and platform. If failed (invalid address or no valid instruction), returns False.
 
 ```python
 >>> disassembly.GetOperandSize("0x77BB80C9")
@@ -800,7 +809,7 @@ Return value of interface function (JSON):
 
 #### GetBranchDestination
 
-通过传入分支指令（如JMP、CALL等）的内存地址（支持十六进制字符串格式，如“0x77BB80C9”），获取该分支指令的跳转/调用目标地址。仅对分支类型指令有效，非分支指令（如MOV、PUSH）将返回目标地址0。若成功，则返回一个包含源地址、分支目标地址和描述信息的字典。若失败（地址无效），则返回False。
+By passing in the memory address of a branch instruction (such as JMP, CALL, etc.) (supporting hexadecimal string format, such as "0x77BB80C9"), obtain the jump/call target address of that branch instruction. Only valid for branch type instructions; non-branch instructions (such as MOV, PUSH) will return target address 0. If successful, returns a dictionary containing source address, branch target address, and descriptive information. If failed (invalid address), returns False.
 
 ```python
 >>> disassembly.GetBranchDestination("0x77BB80C9")
@@ -819,7 +828,7 @@ Return value of interface function (JSON):
 
 #### GuiGetDisassembly
 
-通过传入目标指令的内存地址（支持十六进制字符串格式，如“0x77BB80C9”），基于UI层反汇编逻辑（与底层反汇编接口不同）获取该地址处的机器指令。指令结果通常包含模块名称前缀（如ntdll.），这更符合图形界面（GUI）的显示要求。成功时，返回一个包含地址信息、UI层反汇编指令、函数描述和平台的字典。失败时，返回false（如地址无效或UI层逻辑解析失败）。
+By passing in the memory address of the target instruction (supporting hexadecimal string format, such as "0x77BB80C9"), obtain the machine instruction at that address based on the UI layer disassembly logic (different from the underlying disassembly interface). The instruction result usually includes a module name prefix (such as ntdll.), which is more in line with the display requirements of the graphical user interface (GUI). On success, returns a dictionary containing address information, UI layer disassembly instruction, function description, and platform. On failure, returns false (e.g., invalid address or UI layer logic parsing failure).
 
 ```python
 >> disassembly.GuiGetDisassembly("0x77BB80C9")
@@ -835,7 +844,7 @@ Return value of interface function (JSON):
 
 #### AssembleMemoryEx
 
-将指定的x86架构汇编指令翻译成机器代码，并将其写入目标内存地址。在调试场景中（如动态补丁、调整执行流程、修复或绕过特定代码），该核心用于修改目标程序的指令逻辑。若成功，则返回一个包含汇编指令、目标地址和关键考虑因素的字典。若失败，则返回false（常见失败原因：汇编指令语法错误、目标地址无内存写入权限、地址无效或超出程序地址空间）。
+Translate the specified x86 architecture assembly instruction into machine code and write it to the target memory address. In debugging scenarios (such as dynamic patching, adjusting execution flow, fixing or bypassing specific code), this core is used to modify the instruction logic of the target program. If successful, returns a dictionary containing assembly instruction, target address, and key considerations. If failed, returns false (common failure reasons: assembly instruction syntax error, no memory write permission at target address, invalid address, or address exceeding program address space).
 
 ```python
 >>> disassembly.AssembleMemoryEx("0x77BB80C9","mov eax,1")
@@ -852,7 +861,7 @@ Return value of interface function (JSON):
 
 #### AssembleCodeSize
 
-模拟指定x86架构汇编指令的汇编（仅计算指令汇编后的机器码字节长度，而不实际写入内存），核心用于调试预处理场景——提前确认指令长度，以避免在直接修改内存时因指令长度不匹配而覆盖相邻的有效代码。成功时，返回一个包含汇编指令、机器码大小和“无内存写入”提示的字典。失败时，返回false（常见失败原因包括汇编指令语法错误、指令不符合x86架构规范、包含多条指令或非法运算符）。
+Simulate the assembly of the specified x86 architecture assembly instruction (only calculate the machine code byte length after instruction assembly, without actually writing to memory). The core is used in debugging preprocessing scenarios - confirm the instruction length in advance to avoid overwriting adjacent valid code due to mismatched instruction lengths when directly modifying memory. On success, returns a dictionary containing assembly instruction, machine code size, and "no memory write" prompt. On failure, returns false (common failure reasons: assembly instruction syntax error, instruction does not conform to x86 architecture specifications, contains multiple instructions, or illegal operators).
 
 ```python
 >>> disassembly.AssembleCodeSize("mov eax,1")
@@ -880,7 +889,7 @@ Return value of interface function (JSON):
 
 #### AssembleCodeHex
 
-将指定的x86架构汇编指令翻译成以十六进制格式表示的机器代码（以空格分隔的字节字符串形式）。该函数主要用于调试预处理场景——在不实际写入内存的情况下（“模拟运行”模式）提前检索指令的机器代码特征。此功能有助于验证汇编指令的正确性、比较原始机器代码或为后续的内存写入操作做准备。如果成功，它将返回一个字典，其中包含汇编指令、十六进制机器代码、机器代码长度和关键提示；如果失败，它将返回False（常见失败原因：汇编语法错误、指令与x86架构不兼容、多条指令或非法运算符）。
+Translate the specified x86 architecture assembly instruction into machine code represented in hexadecimal format (as a space-separated byte string). This function is mainly used in debugging preprocessing scenarios - retrieve the machine code characteristics of the instruction in advance without actually writing to memory ("simulated run" mode). This feature helps verify the correctness of assembly instructions, compare original machine code, or prepare for subsequent memory write operations. If successful, returns a dictionary containing assembly instruction, hexadecimal machine code, machine code length, and key prompts; if failed, returns False (common failure reasons: assembly syntax error, instruction incompatible with x86 architecture, multiple instructions, or illegal operators).
 
 ```python
 >>> disassembly.AssembleCodeHex("mov eax,100")
@@ -898,7 +907,7 @@ Return value of interface function (JSON):
 
 #### AssembleAtFunctionEx
 
-将指定的x86架构汇编指令组装成机器代码，并将该机器代码写入目标内存地址（通常用于修改函数范围内的指令，尽管它支持任何有效的内存地址）。它是动态调试场景的核心——例如，修补代码（例如，用nop替换关键指令以禁用逻辑）、调整函数执行流程或修复运行时错误。成功时，它返回一个包含汇编指令、目标地址详细信息和关键警告的字典；失败时，它返回false（常见失败原因：汇编语法错误、目标地址缺乏写入权限、地址无效或地址超出程序地址空间）。
+Assemble the specified x86 architecture assembly instruction into machine code and write the machine code to the target memory address (usually used to modify instructions within a function scope, although it supports any valid memory address). It is the core of dynamic debugging scenarios - for example, patching code (e.g., replacing key instructions with nop to disable logic), adjusting function execution flow, or fixing runtime errors. On success, returns a dictionary containing assembly instruction, target address details, and key warnings; on failure, returns false (common failure reasons: assembly syntax error, target address lacks write permission, invalid address, or address exceeds program address space).
 
 ```python
 >>> disassembly.AssembleAtFunctionEx("0x77BB80C9","nop")
@@ -913,13 +922,13 @@ Return value of interface function (JSON):
 }
 ```
 
-### 内存接口
+### Memory Interface
 
-在调试过程中，内存操作和管理尤为重要。该插件封装了大量针对内存的操作函数，如内存属性读取、内存地址读写、内存检索、内存替换、堆栈控制等功能。通过这些操作函数，逆向分析人员可以动态地管理和监控内存。
+During debugging, memory operations and management are particularly important. The plug-in encapsulates a large number of memory operation functions, such as memory attribute reading, memory address reading/writing, memory retrieval, memory replacement, stack control, etc. Through these operation functions, reverse analysts can dynamically manage and monitor memory.
 
 #### GetBase
 
-检索包含指定输入内存地址的模块（例如，DLL 或可执行文件）的基地址（起始地址）。这对于调试和内存分析至关重要，因为它可以将特定的内存位置映射回其父模块，从而帮助确定该地址属于哪个二进制文件（例如，ntdll.dll、kernel32.dll）。如果成功，它将返回一个字典，其中包含输入地址的详细信息、模块的基地址和解释性说明；如果失败，它将返回 false（常见失败原因：输入地址无效，地址不属于任何已加载的模块）。
+Retrieve the base address (starting address) of the module (e.g., DLL or executable file) that contains the specified input memory address. This is crucial for debugging and memory analysis, as it can map a specific memory location back to its parent module, thereby helping to determine which binary file the address belongs to (e.g., ntdll.dll, kernel32.dll). If successful, returns a dictionary containing detailed information about the input address, the module's base address, and explanatory notes; if failed, returns false (common failure reasons: invalid input address, address does not belong to any loaded module).
 
 ```python
 >>> memory.GetBase("0x77BB80CB")
@@ -937,7 +946,7 @@ Return value of interface function (JSON):
 
 #### GetLocalBase
 
-检索包含当前指令指针（EIP，适用于 x86 架构）的模块（例如，DLL、可执行文件）的基地址。与 GetBase（需要手动指定输入地址）不同，该函数会自动获取 EIP 寄存器的当前值（指向即将执行的下一条指令的寄存器），并将其映射到其父模块的基地址。它非常适用于动态调试场景，可快速识别与当前正在执行的代码关联的模块。成功时，返回包含当前 EIP 详情和对应模块基地址的字典；失败时返回 false（常见失败原因：EIP 值无效、EIP 指向未分配内存、或没有包含该 EIP 地址的已加载模块）。
+Retrieve the base address of the module (e.g., DLL, executable file) that contains the current instruction pointer (EIP, for x86 architecture). Unlike GetBase (which requires manual specification of the input address), this function automatically obtains the current value of the EIP register (the register pointing to the next instruction to be executed) and maps it to the base address of its parent module. It is very suitable for dynamic debugging scenarios and can quickly identify the module associated with the currently executing code. On success, returns a dictionary containing current EIP details and the corresponding module base address; on failure, returns false (common failure reasons: invalid EIP value, EIP points to unallocated memory, or no loaded module contains the EIP address).
 
 ```python
 >>> memory.GetLocalBase()
@@ -955,7 +964,7 @@ Return value of interface function (JSON):
 
 #### GetSize
 
-检索包含指定输入内存地址的模块（例如，DLL、可执行文件）的总内存大小。该函数将输入地址映射到其父模块，并以原始字节数（用于精确计算）和人类可读格式（用于快速理解）返回模块的总分配内存大小。这对于内存分析和调试至关重要 —— 可帮助验证模块的内存范围、检查地址是否在模块边界内、或了解模块的内存占用情况。成功时，返回包含输入地址详情、模块大小（字节数和人类可读形式）和解释性说明的字典；失败时返回 false（常见失败原因：输入地址无效、地址不属于任何已加载的模块）。
+Retrieve the total memory size of the module (e.g., DLL, executable file) that contains the specified input memory address. The function maps the input address to its parent module and returns the total allocated memory size of the module in raw bytes (for precise calculation) and human-readable format (for quick understanding). This is crucial for memory analysis and debugging - it helps verify the memory range of the module, check if the address is within the module boundaries, or understand the memory footprint of the module. On success, returns a dictionary containing input address details, module size (bytes and human-readable form), and explanatory notes; on failure, returns false (common failure reasons: invalid input address, address does not belong to any loaded module).
 
 ```python
 >>> memory.GetSize("0x77BB80CB")
@@ -973,7 +982,7 @@ Return value of interface function (JSON):
 
 #### GetLocalSize
 
-检索包含当前指令指针（EIP，适用于 x86 架构）的模块（例如，DLL、可执行文件）的总内存大小。与 GetSize（需要手动指定输入地址）不同，该函数会自动获取 EIP 寄存器的当前值（指向即将执行的下一条指令的寄存器），并返回与该 EIP 地址关联的模块的总内存大小。它专为动态调试场景设计，可快速获取运行当前代码的模块的内存占用情况 —— 无需手动输入地址。成功时，返回包含当前 EIP 详情和对应模块大小的字典；失败时返回 false（常见失败原因：EIP 值无效、EIP 指向未分配内存、或没有包含该 EIP 地址的已加载模块）。
+Retrieve the total memory size of the module (e.g., DLL, executable file) that contains the current instruction pointer (EIP, for x86 architecture). Unlike GetSize (which requires manual specification of the input address), this function automatically obtains the current value of the EIP register (the register pointing to the next instruction to be executed) and returns the total memory size of the module associated with the EIP address. It is specifically designed for dynamic debugging scenarios and can quickly obtain the memory footprint of the module running the current code - without manual address input. On success, returns a dictionary containing current EIP details and the corresponding module size; on failure, returns false (common failure reasons: invalid EIP value, EIP points to unallocated memory, or no loaded module contains the EIP address).
 
 ```python
 >>> memory.GetLocalSize()
@@ -991,7 +1000,7 @@ Return value of interface function (JSON):
 
 #### GetProtect
 
-检索指定内存地址的内存保护属性（例如，该地址是否可读、可写或可执行），并返回原始保护标志和人类可读的解释说明。该函数对于调试和内存操作场景至关重要 —— 例如，在尝试修补代码前验证地址是否可修改（可写），或确认地址是否包含可执行指令。成功时，返回包含详细保护标志、读 / 写 / 可执行权限的布尔指示符和地址详情的字典；失败时返回 false（常见失败原因：输入地址无效、地址未映射到目标进程的任何内存页）。
+Retrieve the memory protection attributes of the specified memory address (e.g., whether the address is readable, writable, or executable), and return the raw protection flags and human-readable explanations. This function is crucial for debugging and memory operation scenarios - for example, verifying whether an address is modifiable (writable) before attempting to patch code, or confirming whether an address contains executable instructions. On success, returns a dictionary containing detailed protection flags, boolean indicators for read/write/executable permissions, and address details; on failure, returns false (common failure reasons: invalid input address, address not mapped to any memory page of the target process).
 
 ```python
 >>> memory.GetProtect("0x77BB80CB")
@@ -1012,7 +1021,7 @@ Return value of interface function (JSON):
 
 #### GetLocalProtect
 
-检索包含当前指令指针（EIP，适用于 x86 架构）的内存页的内存保护属性。与 GetProtect（需要手动指定输入地址）不同，该函数会自动获取 EIP 寄存器的当前值（指向即将执行的下一条指令的寄存器），并返回 EIP 所在内存页的保护属性（例如，读、写、执行权限）。它非常适用于动态调试场景，可快速检查当前正在执行的代码页的权限设置 —— 无需手动输入地址。成功时，返回包含 EIP 详情、原始保护标志、人类可读的权限说明和布尔指示符的字典；失败时返回 false（常见失败原因：EIP 值无效、EIP 指向未映射内存页、或无法访问 EIP 地址的内存保护数据）。
+Retrieve the memory protection attributes of the memory page containing the current instruction pointer (EIP, for x86 architecture). Unlike GetProtect (which requires manual specification of the input address), this function automatically obtains the current value of the EIP register (the register pointing to the next instruction to be executed) and returns the protection attributes (e.g., read, write, execute permissions) of the memory page where the EIP resides. It is very suitable for dynamic debugging scenarios and can quickly check the permission settings of the code page currently being executed - without manual address input. On success, returns a dictionary containing EIP details, raw protection flags, human-readable permission descriptions, and boolean indicators; on failure, returns false (common failure reasons: invalid EIP value, EIP points to unmapped memory page, or cannot access memory protection data at the EIP address).
 
 ```python
 >>> memory.GetLocalProtect()
@@ -1034,7 +1043,7 @@ Return value of interface function (JSON):
 
 #### GetLocalPageSize
 
-检索包含当前指令指针（EIP，适用于 x86 架构）的内存页大小。x86 系统中的内存以连续的 “页” 为单位进行管理（内存分配和保护的最小单位），该函数会自动定位与当前 EIP（指向即将执行的下一条指令的寄存器）关联的内存页。它以原始字节数（用于技术计算）和人类可读格式（用于快速理解）返回页大小，并附带关于 x86 常见页大小的说明。成功时，返回包含 EIP 详情、页大小值和上下文说明的字典；失败时返回 false（常见失败原因：EIP 值无效、EIP 指向未映射内存页、或无法检索页大小元数据）。
+Retrieve the memory page size containing the current instruction pointer (EIP, for x86 architecture). Memory in x86 systems is managed in contiguous "pages" (the smallest unit for memory allocation and protection). This function automatically locates the memory page associated with the current EIP (the register pointing to the next instruction to be executed). It returns the page size in raw bytes (for technical calculation) and human-readable format (for quick understanding), along with notes about common x86 page sizes. On success, returns a dictionary containing EIP details, page size values, and contextual notes; on failure, returns false (common failure reasons: invalid EIP value, EIP points to unmapped memory page, or cannot retrieve page size metadata).
 
 ```python
 >>> memory.GetLocalPageSize()
@@ -1052,7 +1061,7 @@ Return value of interface function (JSON):
 
 #### GetPageSize
 
-检索包含指定目标内存地址的内存页大小。x86 系统中的内存被组织为连续的 “页”（操作系统用于分配、保护和交换的最小内存管理单位），该函数将输入地址映射到其对应的内存页，并返回该页的大小。结果以原始字节数（用于技术计算）和人类可读格式（用于快速理解）提供，同时附带关于默认页大小的上下文说明。成功时，返回包含目标地址详情、页大小值和解释性说明的字典；失败时返回 false（常见失败原因：目标地址无效、地址未映射到目标进程的任何内存页、或无法访问操作系统内存管理数据）。
+Retrieve the memory page size containing the specified target memory address. Memory in x86 systems is organized into contiguous "pages" (the smallest memory management unit used by the operating system for allocation, protection, and swapping). This function maps the input address to its corresponding memory page and returns the size of that page. Results are provided in raw bytes (for technical calculation) and human-readable format (for quick understanding), along with contextual notes about the default page size. On success, returns a dictionary containing target address details, page size values, and explanatory notes; on failure, returns false (common failure reasons: invalid target address, address not mapped to any memory page of the target process, or cannot access operating system memory management data).
 
 ```python
 >>> memory.GetPageSize("0x77BB80CB")
@@ -1069,7 +1078,7 @@ Return value of interface function (JSON):
 
 #### IsValidReadPtr
 
-检查指定的内存地址是否为有效的读指针 —— 即该地址是否映射到目标 x86 进程中具有读权限的内存区域。该函数是内存读取操作（例如，从地址获取数据或指令）前的关键预检查步骤，可避免访问冲突等运行时错误。成功时（无论指针是否有效），返回包含检查结果和上下文的字典；仅当输入地址格式错误（例如，无效的十六进制格式）或检查本身失败（例如，操作系统级内存查询错误）时，才返回 false。
+Check whether the specified memory address is a valid read pointer - that is, whether the address is mapped to a memory region with read permission in the target x86 process. This function is a critical pre-check step before memory read operations (e.g., getting data or instructions from an address) and can avoid runtime errors such as access violations. On success (regardless of whether the pointer is valid), returns a dictionary containing the check result and context; only returns false if the input address format is incorrect (e.g., invalid hexadecimal format) or the check itself fails (e.g., operating system-level memory query error).
 
 ```python
 >>> memory.IsValidReadPtr("0x77BB80CB")
@@ -1085,7 +1094,7 @@ Return value of interface function (JSON):
 
 #### GetSectionMap
 
-检索目标 x86 进程中所有连续内存区域的综合映射，其中每个区域由统一的属性（例如，保护设置、内存状态和类型）定义。该函数提供了进程中内存分配和组织方式的高级概览，对于内存分析、逆向工程和调试具有不可估量的价值 —— 例如，识别映射文件、跟踪内存使用情况或诊断内存泄漏。成功时，返回包含总区域数摘要和每个内存区域属性详细列表的字典；失败时返回 false（常见失败原因：无法查询进程的内存布局、访问内存元数据的权限不足、或无效的进程上下文）。
+Retrieve a comprehensive map of all contiguous memory regions in the target x86 process, where each region is defined by uniform attributes (e.g., protection settings, memory state, and type). This function provides a high-level overview of how memory is allocated and organized in the process, which is invaluable for memory analysis, reverse engineering, and debugging - for example, identifying mapped files, tracking memory usage, or diagnosing memory leaks. On success, returns a dictionary containing a summary of the total number of regions and a detailed list of each memory region's attributes; on failure, returns false (common failure reasons: cannot query the process's memory layout, insufficient permissions to access memory metadata, or invalid process context).
 
 ```python
 >>> memory.GetSectionMap()
@@ -1126,7 +1135,7 @@ Return value of interface function (JSON):
 
 #### GetXrefCountAt
 
-检索指向指定内存地址的交叉引用（xrefs）数量。交叉引用是来自代码或数据其他部分（例如，函数调用、跳转指令或指针）指向目标地址的引用。该函数对于逆向工程和代码分析至关重要 —— 可帮助识别特定地址被引用的次数（以及来源），例如跟踪函数的调用位置或数据变量的使用位置。成功时，返回包含目标地址详情、交叉引用数量和解释性说明的字典；失败时返回 false（常见失败原因：目标地址无效、地址未出现在进程的内存映射中、或无法查询引用元数据）。
+Retrieve the number of cross-references (xrefs) pointing to the specified memory address. Cross-references are references from other parts of code or data (e.g., function calls, jump instructions, or pointers) that point to the target address. This function is crucial for reverse engineering and code analysis - it helps identify how many times (and from where) a specific address is referenced, such as tracking where a function is called or where a data variable is used. On success, returns a dictionary containing target address details, cross-reference count, and explanatory notes; on failure, returns false (common failure reasons: invalid target address, address not present in the process's memory map, or cannot query reference metadata).
 
 ```python
 >>> memory.GetXrefCountAt("0x77BB80CB")
@@ -1143,7 +1152,7 @@ Return value of interface function (JSON):
 
 #### GetXrefTypeAt
 
-检索指向目标 x86 进程中指定内存地址的交叉引用（xref）类型。交叉引用是来自另一个内存位置（例如，代码指令或数据指针）到目标地址的链接；该函数将该链接分类为特定类型（例如，函数调用、跳转、数据指针），或确认不存在交叉引用。它是逆向工程和代码分析的关键工具 —— 可帮助识别目标地址的使用方式（例如，作为要调用的函数、要访问的数据值或未使用的位置）。成功时，返回包含目标地址、交叉引用类型详情和上下文的字典；失败时返回 false（常见失败原因：目标地址无效、十六进制格式错误、或无法查询交叉引用元数据）。
+Retrieve the cross-reference (xref) type pointing to the specified memory address in the target x86 process. A cross-reference is a link from another memory location (e.g., code instruction or data pointer) to the target address; this function classifies that link into a specific type (e.g., function call, jump, data pointer), or confirms that no cross-reference exists. It is a key tool for reverse engineering and code analysis - it helps identify how the target address is used (e.g., as a function to be called, as a data value to be accessed, or as an unused location). On success, returns a dictionary containing target address, cross-reference type details, and context; on failure, returns false (common failure reasons: invalid target address, incorrect hexadecimal format, or cannot query cross-reference metadata).
 
 ```python
 >>> memory.GetXrefTypeAt("0x77BB80CB")
@@ -1159,7 +1168,7 @@ Return value of interface function (JSON):
 
 #### GetFunctionTypeAt
 
-确定指定的内存地址是否位于目标 x86 进程的某个函数内，如果是，则对该函数的类型进行分类（例如，用户定义函数、系统 API 或辅助函数）。如果该地址不属于任何函数（例如，位于数据段、未分配内存或函数边界之间），则返回 “非函数” 类型。该函数对于逆向工程和调试至关重要 —— 可帮助识别内存地址的作用（例如，是否属于应用程序逻辑、系统调用或不可执行数据）。成功时，返回包含目标地址、函数类型详情和上下文的字典；失败时返回 false（常见失败原因：目标地址无效、十六进制格式错误、或无法分析进程中的函数边界）。
+Determine whether the specified memory address is located within a function of the target x86 process, and if so, classify the type of that function (e.g., user-defined function, system API, or auxiliary function). If the address does not belong to any function (e.g., located in a data segment, unallocated memory, or between function boundaries), return "non-function" type. This function is crucial for reverse engineering and debugging - it helps identify the role of a memory address (e.g., whether it belongs to application logic, system calls, or non-executable data). On success, returns a dictionary containing target address, function type details, and context; on failure, returns false (common failure reasons: invalid target address, incorrect hexadecimal format, or cannot analyze function boundaries in the process).
 
 ```python
 >>> memory.GetFunctionTypeAt("0x77BB80CB")
@@ -1175,7 +1184,7 @@ Return value of interface function (JSON):
 
 #### IsJumpGoingToExecute
 
-检查目标 x86 进程中指定内存地址的两个关键条件：1）该地址是否包含跳转指令（例如，JMP、JE、JNZ）；2）如果包含，该跳转的目标地址是否位于可执行内存中（例如，.text 等代码段）。该函数对于调试和逆向工程至关重要 —— 可帮助验证跳转是否会将执行重定向到有效的代码（而非不可执行数据或无效内存，否则会导致访问冲突等崩溃）。成功时，返回包含跳转指令详情和目标可执行状态的字典；失败时返回 false（常见失败原因：输入地址无效、地址不包含跳转指令、或无法解析跳转的目标地址）。
+Check two key conditions at the specified memory address in the target x86 process: 1) whether the address contains a jump instruction (e.g., JMP, JE, JNZ); 2) if it does, whether the target address of that jump is located in executable memory (e.g., code segments like .text). This function is crucial for debugging and reverse engineering - it helps verify whether a jump will redirect execution to valid code (rather than non-executable data or invalid memory, which would cause crashes like access violations). On success, returns a dictionary containing jump instruction details and target executable status; on failure, returns false (common failure reasons: invalid input address, address does not contain a jump instruction, or cannot resolve the jump's target address).
 
 ```python
 >>> memory.IsJumpGoingToExecute("0x77BB80CB")
@@ -1191,7 +1200,7 @@ Return value of interface function (JSON):
 
 #### SetProtect
 
-修改目标 x86 进程中连续内存区域的内存保护属性。与 GetProtect（仅读取保护设置）不同，该函数会主动更改指定起始地址和区域大小的权限（例如，启用写访问以进行代码修补、限制对敏感数据的访问）。它对于调试和内存操作场景至关重要 —— 例如，临时将只读代码段设为可写以应用补丁，然后恢复保护设置。成功时，返回包含修改区域详情、新保护设置和关键警告的字典；失败时返回 false（常见失败原因：起始地址无效、区域大小未对齐、目标保护标志无效、进程权限不足、或修改受保护的内核内存）。
+Modify the memory protection attributes of a contiguous memory region in the target x86 process. Unlike GetProtect (which only reads protection settings), this function actively changes permissions for a specified starting address and region size (e.g., enabling write access for code patching, restricting access to sensitive data). It is crucial for debugging and memory operation scenarios - for example, temporarily making a read-only code segment writable to apply patches, then restoring protection settings. On success, returns a dictionary containing modified region details, new protection settings, and key warnings; on failure, returns false (common failure reasons: invalid starting address, unaligned region size, invalid target protection flags, insufficient process permissions, or modifying protected kernel memory).
 
 ```python
 >>> memory.SetProtect("0x77BB80CB","0x10","0x2")
@@ -1209,7 +1218,7 @@ Return value of interface function (JSON):
 
 #### RemoteAlloc
 
-在远程进程（调用函数的进程以外的进程）中分配连续的内存块，并返回已分配区域的详情。该函数对于进程间通信、调试和注入场景至关重要 —— 例如，在目标进程中分配内存以存储数据或代码，然后通过类似 WriteProcessMemory 的操作写入数据。成功时，返回包含请求和实际分配详情以及关于内存管理的关键警告的字典；失败时返回 false（常见失败原因：大小无效、远程进程内存不足、缺乏在目标进程中分配内存的权限、或请求的基地址无效）。
+Allocate a contiguous block of memory in a remote process (a process other than the one calling the function), and return details of the allocated region. This function is crucial for inter-process communication, debugging, and injection scenarios - for example, allocating memory in a target process to store data or code, then writing data via operations similar to WriteProcessMemory. On success, returns a dictionary containing requested and actual allocation details, along with key warnings about memory management; on failure, returns false (common failure reasons: invalid size, insufficient memory in the remote process, lack of permissions to allocate memory in the target process, or invalid requested base address).
 
 ```python
 >>> memory.RemoteAlloc("0","1024")
@@ -1227,7 +1236,7 @@ Return value of interface function (JSON):
 
 #### RemoteFree
 
-释放远程进程（调用方以外的进程）中先前通过 mem.RemoteAlloc 分配的内存块。该函数对于进程间场景中的内存管理至关重要 —— 其主要作用是清理远程分配的内存，以防止目标进程中出现内存泄漏（未释放的内存会一直存在，直到远程进程终止，造成资源浪费）。成功时，返回确认已释放地址的字典；失败时返回 false（常见失败原因：地址无效或未分配、该地址并非通过 RemoteAlloc 分配、修改远程进程内存的权限不足、或远程进程已终止）。
+Free a block of memory previously allocated via mem.RemoteAlloc in a remote process (other than the caller). This function is crucial for memory management in inter-process scenarios - its main role is to clean up remotely allocated memory to prevent memory leaks in the target process (unfreed memory persists until the remote process terminates, causing resource waste). On success, returns a dictionary confirming the freed address; on failure, returns false (common failure reasons: invalid or unallocated address, address not allocated via RemoteAlloc, insufficient permissions to modify remote process memory, or remote process has terminated).
 
 ```python
 >>> memory.RemoteFree("0x00ED0000")
@@ -1241,7 +1250,7 @@ Return value of interface function (JSON):
 
 #### StackPush
 
-将指定的数值压入目标 x86 进程的调用栈。栈是 x86 系统中用于临时数据存储、函数参数传递和返回地址跟踪的关键后进先出（LIFO）内存区域。该函数对于底层调试、模拟函数调用或操作栈状态（例如，在调用函数前为其准备参数）至关重要。成功时，返回确认已压入值和栈详情的字典；失败时返回 false（常见失败原因：值格式无效、栈溢出、修改目标进程栈的权限不足、或目标进程的栈不可用）。
+Push the specified value onto the call stack of the target x86 process. The stack is a critical Last-In-First-Out (LIFO) memory region in x86 systems used for temporary data storage, function parameter passing, and return address tracking. This function is crucial for low-level debugging, simulating function calls, or manipulating stack state (e.g., preparing parameters for a function before calling it). On success, returns a dictionary confirming the pushed value and stack details; on failure, returns false (common failure reasons: invalid value format, stack overflow, insufficient permissions to modify the target process's stack, or target process's stack unavailable).
 
 ```python
 >>> memory.StackPush("0x1000")
@@ -1257,7 +1266,7 @@ Return value of interface function (JSON):
 
 #### StackPop
 
-从目标 x86 进程的调用栈中检索并移除栈顶元素。栈是 x86 系统中用于临时数据存储、函数参数检索和返回地址管理的关键后进先出（LIFO）内存区域。该函数对于底层调试、撤销栈操作（例如，撤销先前的 StackPush）或提取压入栈中的函数参数至关重要。成功时，返回包含弹出值、栈详情和关于结果解释的关键说明的字典；失败时返回 false（常见失败原因：栈下溢、读取 / 修改目标栈的权限不足、或目标进程的栈损坏 / 不可用）。
+Retrieve and remove the top element from the call stack of the target x86 process. The stack is a critical Last-In-First-Out (LIFO) memory region in x86 systems used for temporary data storage, function parameter retrieval, and return address management. This function is crucial for low-level debugging, undoing stack operations (e.g., reversing a previous StackPush), or extracting function parameters pushed onto the stack. On success, returns a dictionary containing the popped value, stack details, and key notes about result interpretation; on failure, returns false (common failure reasons: stack underflow, insufficient permissions to read/modify the target stack, or target process's stack corrupted/unavailable).
 
 ```python
 >>> memory.StackPop()
@@ -1267,14 +1276,13 @@ Return value of interface function (JSON):
     'popped_value_hex': '0x00001000',
     'popped_value_decimal': 4096,
     'stack_width': '4bytes(x86)',
-    'note': 'Poppedvalue=0maybevalid(e.g.,NULLpointer),checkstackstateforfailure',
     'platform': 'x86'
 }
 ```
 
 #### StackPeek
 
-对目标 x86 进程调用栈上的元素执行非破坏性检查 —— 即检索栈元素的值而不将其移除（与 StackPop 不同，StackPop 会删除栈顶元素）。栈是后进先出（LIFO）内存区域，该函数允许查看距栈顶特定偏移量的元素（例如，栈顶元素、栈顶下一个位置的元素）。它对于底层调试、验证栈状态（例如，检查参数是否已正确压入）或在不干扰栈的情况下检查临时数据至关重要。成功时，返回包含查看值、偏移详情和栈元数据的字典；失败时返回 false（常见失败原因：偏移格式无效、偏移超出栈元素数量、读取目标栈的权限不足、或目标进程的栈损坏 / 不可用）。
+Perform non-destructive inspection on elements of the target x86 process call stack - that is, retrieve the values of stack elements without removing them (unlike StackPop, which deletes the top element of the stack). The stack is a last-in-first-out (LIFO) memory area, and this function allows viewing elements at a specific offset from the top of the stack (for example, the top element, or the element at the next position from the top). It is crucial for low-level debugging, verifying stack state (for example, checking whether parameters have been pushed correctly), or inspecting temporary data without disturbing the stack. Upon success, a dictionary containing the viewed value, offset details, and stack metadata is returned; upon failure, false is returned (common failure reasons include invalid offset format, offset exceeding the number of stack elements, insufficient permissions to read the target stack, or stack corruption/unavailability in the target process).
 
 ```python
 >>> memory.StackPeek("0")
@@ -1302,7 +1310,7 @@ Return value of interface function (JSON):
 
 #### ReadMemory
 
-这四个函数从目标 x86 进程的指定地址读取内存，仅在检索的数据块大小和值的解释方式（例如，原始字节、整数或指针）上有所不同。它们对于在字节级别检查内存内容、检索数值或解析指向其他内存地址的指针至关重要。所有函数在成功时都会返回读取操作的详细元数据；失败时（例如，地址无效、内存不可读）返回 false。
+These four functions read memory from a specified address in the target x86 process, differing only in the size of the data block retrieved and the interpretation of the value (e.g., raw bytes, integer, or pointer). They are crucial for inspecting memory contents at the byte level, retrieving numerical values, or parsing pointers to other memory addresses. All functions return detailed metadata about the read operation upon success; upon failure (e.g., invalid address, unreadable memory), they return false.
 
 ```python
 >>> memory.ReadByte("0x77BB80CB")
@@ -1350,7 +1358,7 @@ Return value of interface function (JSON):
 
 #### WriteMemory
 
-这四个函数向目标 x86 进程的指定内存地址写入固定大小的数据，仅在数据块大小（1–4 字节）和值的语义意图（例如，原始字节、整数或内存指针）上有所不同。它们支持对内存进行精确修改，适用于修补指令、更新数值或将指针设置为有效地址等场景。所有函数在成功时都会返回写入操作的详细元数据；失败时（例如，地址无效、内存不可写、未对齐）返回 false。
+These four functions write fixed-size data to a specified memory address in the target x86 process, differing only in the size of the data block (1–4 bytes) and the semantic intention of the value (e.g., raw bytes, integer, or memory pointer). They support precise modifications to memory and are suitable for scenarios such as patching instructions, updating values, or setting pointers to valid addresses. All functions return detailed metadata about the write operation upon success; in case of failure (e.g., invalid address, memory not writable, misaligned), they return false.
 
 ```python
 >>> memory.WriteByte("0x77BB80CB","0x90")
@@ -1402,7 +1410,7 @@ Return value of interface function (JSON):
 
 #### ScanModule
 
-在 x86 进程中目标模块（例如，DLL、EXE）的内存中搜索指定的字节模式，其中模块通过包含给定的引用地址来标识。该函数对于逆向工程、特征扫描和代码分析至关重要 —— 可用于在已知模块中定位特定的指令序列、数据模式或特征（例如，在 kernel32.dll 中查找所有 JMP [address] 指令）。成功时，返回包含扫描详情（包括第一个匹配地址和总匹配数）的字典；失败时返回 false（常见失败原因：模式格式无效、引用地址无效、引用地址不属于任何已加载的模块、或未找到匹配项）。
+Searches the memory of the target module (e.g., DLL, EXE) within an x86 process for a specified byte pattern, where the module is identified by containing a given reference address. This function is crucial for reverse engineering, signature scanning, and code analysis - it can be used to locate specific instruction sequences, data patterns, or signatures within a known module (e.g., searching for all JMP [address] instructions in kernel32.dll). Upon success, a dictionary containing scanning details (including the first matching address and the total number of matches) is returned; upon failure, false is returned (common failure reasons include invalid pattern format, invalid reference address, reference address does not belong to any loaded module, or no matches found).
 
 ```python
 >>> memory.ScanModule("FF 25 ??","0x77BB80CB")
@@ -1420,7 +1428,7 @@ Return value of interface function (JSON):
 
 #### ScanRange
 
-在目标 x86 进程的用户定义连续内存范围内搜索指定的字节模式。与 ScanModule（扫描整个模块）不同，ScanRange 将搜索限制在精确的区间内（由起始地址和大小定义），非常适用于对小内存块（例如，特定函数、数据缓冲区或代码段）进行定向扫描。它对于底层调试、特征验证和局部代码分析至关重要 —— 可避免扫描无关内存，专注于特定区域。输入有效时（即使未找到匹配项），返回包含扫描详情的字典；输入无效时返回 false（常见失败原因：模式语法无效、大小非正数、起始地址超出进程的内存空间、或起始地址 + 大小超出进程的地址限制）。
+Searches for a specified byte pattern within a user-defined contiguous memory range of the target x86 process. Unlike ScanModule, which scans the entire module, ScanRange restricts the search to a precise interval (defined by a starting address and size), making it ideal for targeted scanning of small memory blocks (such as specific functions, data buffers, or code segments). It is crucial for low-level debugging, feature verification, and local code analysis - allowing you to avoid scanning irrelevant memory and focus on specific areas. When the input is valid (even if no match is found), a dictionary containing scanning details is returned; when the input is invalid, false is returned (common failure reasons include invalid pattern syntax, non-positive size, starting address exceeding the process's memory space, or starting address + size exceeding the process's address limit).
 
 ```python
 >>> memory.ScanRange("FF 25 ??","0x77BB80CB","1024")
@@ -1436,7 +1444,7 @@ Return value of interface function (JSON):
 
 #### ScanModuleAll
 
-在 x86 进程中目标模块（例如，DLL、EXE）的整个内存范围内搜索指定的字节模式，并返回所有匹配的地址（而非仅第一个匹配项）。模块通过位于其中的引用地址标识，确保扫描仅限于该模块的内存。该函数对于逆向工程、批量模式分析和全面特征扫描至关重要 —— 可用于在模块中定位特定指令序列、数据模式或特征的所有实例（例如，在 ntdll.dll 中查找所有 JMP [address] 指令）。成功时（即使未找到匹配项），返回包含详细扫描结果（包括完整的匹配列表）的字典；失败时返回 false（常见失败原因：模式格式无效、引用地址无效、引用地址不属于任何已加载的模块、或无法访问模块的内存）。
+Searches the entire memory range of the target module (e.g., DLL, EXE) within the x86 process for a specified byte pattern and returns all matching addresses (not just the first match). The module is identified by a reference address located within it, ensuring that the scan is limited to the memory of that module. This function is crucial for reverse engineering, batch mode analysis, and comprehensive feature scanning - it can be used to locate all instances of a specific instruction sequence, data pattern, or feature within the module (e.g., finding all JMP [address] instructions in ntdll.dll). Upon success (even if no matches are found), a dictionary containing detailed scan results (including a complete list of matches) is returned; upon failure, false is returned (common failure reasons include invalid pattern format, invalid reference address, reference address does not belong to any loaded module, or module memory is inaccessible).
 
 ```python
 >>> memory.ScanModuleAll("FF 25 ??","0x77BB80CB")
@@ -1460,7 +1468,7 @@ Return value of interface function (JSON):
 
 #### WritePattern
 
-向目标 x86 进程的连续内存范围写入指定的字节模式。该函数用于以精确的字节级控制修改内存 —— 常见用例包括修补代码（例如，用 NOP 字节替换指令）、更新数据值或注入小子节序列。与通用内存写入函数不同，它接受人类可读的空格分隔字节模式，便于指定复杂序列。成功时，返回确认写入操作和关键警告的字典；失败时返回 false（常见失败原因：模式语法无效、内存不可写、起始地址无效、或模式与请求的写入长度不匹配）。
+Write a specified byte pattern to a continuous memory range of the target x86 process. This function is used to modify memory with precise byte-level control - common use cases include patching code (for example, replacing instructions with NOP bytes), updating data values, or injecting small byte sequences. Unlike general memory write functions, it accepts human-readable space-separated byte patterns, making it easy to specify complex sequences. Upon success, a dictionary is returned to confirm the write operation and key warnings; upon failure, false is returned (common failure reasons include invalid pattern syntax, memory not writable, invalid starting address, or pattern does not match the requested write length).
 
 ```python
 >>> memory.WritePattern("90 90 90","0x77BB80CB","3")
@@ -1477,7 +1485,7 @@ Return value of interface function (JSON):
 
 #### ReplacePattern
 
-在目标 x86 进程的用户定义内存范围内搜索指定的字节模式，并将所有匹配项替换为指定的替换模式。该函数将模式扫描和内存写入合并为单个操作，非常适用于批量修补（例如，将指令序列的多个实例替换为新序列）。它确保仅在找到搜索模式的位置应用替换，避免意外修改。成功时（即使未找到匹配项），返回包含扫描 / 替换详情和关键警告的字典；失败时返回 false（常见失败原因：模式语法无效、模式长度不匹配、内存不可写、起始地址无效、或范围大小为负）。
+Searches the user-defined memory range of the target x86 process for a specified byte pattern and replaces all matches with a specified replacement pattern. This function combines pattern scanning and memory writing into a single operation, making it highly suitable for batch patching (for example, replacing multiple instances of an instruction sequence with a new sequence). It ensures that replacements are applied only at the locations where the search pattern is found, avoiding accidental modifications. Upon success (even if no matches are found), a dictionary containing scanning/replacement details and critical warnings is returned; upon failure, false is returned (common failure reasons include invalid pattern syntax, mismatch in pattern length, memory unwriteable, invalid starting address, or negative range size).
 
 ```python
 >>> memory.ReplacePattern("FF 25 ??","90 90 90","0x77BB80CB","1024")
@@ -1493,13 +1501,13 @@ Return value of interface function (JSON):
 }
 ```
 
-### 模块接口
+### Module Interface
 
-在程序中，模块是指用于实现特定功能或任务的独立代码单元。模块可以包含变量、函数和类等程序组件，并且可以被其他程序或模块引用和重用。该插件为模块操作提供了各种功能支持。
+In a program, a module refers to an independent code unit used to implement specific functions or tasks. Modules can contain program components such as variables, functions, and classes, and can be referenced and reused by other programs or modules. This plugin provides various functional supports for module operations.
 
 #### GetModuleBaseAddress
 
-检索加载到目标 x86 进程中的指定模块（如 DLL、EXE）的基地址（起始内存地址）。基地址是该模块在进程中的内存范围入口点，对于在模块内查找函数、扫描模块专属内存或修补已知 DLL/EXE 中的代码 / 数据等任务至关重要。成功时返回包含模块名、基地址（十进制与十六进制）及注释的字典；失败返回 False（常见原因：模块未加载、名称无效、权限不足）。
+Retrieve the base address (starting memory address) of the specified module (such as DLL, EXE) loaded into the target x86 process. The base address is the entry point of the module's memory range in the process, and is crucial for tasks such as finding functions within the module, scanning module-specific memory, or patching code/data in known DLLs/EXE files. Upon success, a dictionary containing the module name, base address (decimal and hexadecimal), and comments is returned; upon failure, False is returned (common reasons: module not loaded, invalid name, insufficient permissions).
 
 ```python
 >>> module.GetModuleBaseAddress("kernelbase.dll")
@@ -1516,7 +1524,7 @@ Return value of interface function (JSON):
 
 #### GetModuleProcAddress
 
-检索目标 x86 进程中指定模块导出函数的内存地址。“导出函数” 是显式提供给其他模块调用的函数（如 kernelbase.dll 中的系统 API）。该函数对动态函数解析至关重要，可用于定位外部模块函数、调试与逆向分析。成功返回模块、函数与地址详情；失败返回 False（原因：模块未加载、函数未导出、名称无效、权限不足）。
+Retrieve the memory address of the exported function specified in the target x86 process. An "exported function" is a function explicitly provided for other modules to call (such as the system API in kernelbase.dll). This function is crucial for dynamic function resolution and can be used to locate external module functions, debug, and perform reverse analysis. Upon success, it returns details of the module, function, and address; upon failure, it returns False (reason: module not loaded, function not exported, invalid name, insufficient permissions).
 
 ```python
 >>> module.GetModuleProcAddress("kernelbase.dll","IsValidCodePage")
@@ -1534,7 +1542,7 @@ Return value of interface function (JSON):
 
 #### GetBaseFromAddr
 
-根据内存地址，反向获取包含该地址的已加载模块的基地址。与通过名称查基址不同，该函数输入一个属于某模块的地址（如函数地址），返回其所属模块基址。常用于调试崩溃、逆向定位模块。成功返回输入地址与对应模块基址；失败返回 False（原因：地址未分配、不属于任何模块、十六进制格式错误）。
+Based on a memory address, this function reversely retrieves the base address of the loaded module containing that address. Unlike finding the base address by name, this function takes an address belonging to a specific module (such as a function address) as input and returns the base address of the module it belongs to. It is commonly used for debugging crashes and reversing module locations. If successful, the function returns the input address and the corresponding module base address; if unsuccessful, it returns False (reason: address is unallocated, does not belong to any module, or has an incorrect hexadecimal format).
 
 ```python
 >>> module.GetBaseFromAddr("0x75840000")
@@ -1552,7 +1560,7 @@ Return value of interface function (JSON):
 
 #### GetBaseFromName
 
-根据模块名称获取其在 x86 进程中的基地址。是 GetModuleBaseAddress 的精简版，功能基本一致。用于已知模块名时快速获取基址，进行偏移计算、内存扫描或代码修补。成功返回模块名与基址；失败返回 False（原因：模块未加载、名称无效、权限不足）。
+Get the base address of a module in the x86 process based on its name. It is a simplified version of GetModuleBaseAddress, with basically the same functionality. It is used to quickly obtain the base address when the module name is known, for offset calculation, memory scanning, or code patching. It returns the module name and base address on success; on failure, it returns False (reason: module not loaded, invalid name, insufficient permissions).
 
 ```python
 >>> module.GetBaseFromName("kernelbase.dll")
@@ -1568,7 +1576,7 @@ Return value of interface function (JSON):
 
 #### GetSizeFromAddress
 
-根据内存地址获取包含该地址的模块总内存大小（包含所有节：代码、数据、资源、元数据）。用于地址范围校验、计算模块结束地址。成功返回输入地址与大小；失败返回 False（原因：地址非法、不属于模块、格式错误）。
+Get the total memory size of the module containing the given memory address (including all sections: code, data, resources, metadata) based on the memory address. This is used for address range verification and calculating the module's end address. If successful, the input address and size will be returned; if unsuccessful, False will be returned (reason: invalid address, not belonging to the module, format error).
 
 ```python
 >>> module.GetSizeFromAddress("0x75840000")
@@ -1585,7 +1593,7 @@ Return value of interface function (JSON):
 
 #### GetSizeFromName
 
-根据模块名称获取其在进程中的总内存大小（包含所有节与填充数据）。用于内存分析、扫描范围校验、确保补丁不越界。成功返回模块名与大小；失败返回 False（原因：模块未加载、名称无效、权限不足）。
+Get the total memory size of a module (including all sections and padding data) in the process based on its name. This is used for memory analysis, scanning range verification, and ensuring that patches do not exceed their bounds. If successful, the module name and size will be returned; if unsuccessful, False will be returned (reason: module not loaded, invalid name, insufficient permissions).
 
 ```python
 >>> module.GetSizeFromName("kernelbase.dll")
@@ -1602,7 +1610,7 @@ Return value of interface function (JSON):
 
 #### GetOEPFromName
 
-根据模块名称获取其原始入口点（OEP）。EXE 的 OEP 是程序执行起点，DLL 的 OEP 是 DllMain。用于调试、逆向、分析模块初始化逻辑。成功返回 OEP 信息；失败返回 False（原因：模块未加载、损坏、权限不足）。
+Get the Original Entry Point (OEP) based on the module name. The OEP of an EXE is the starting point of program execution, while the OEP of a DLL is DllMain. It is used for debugging, reversing, and analyzing module initialization logic. If successful, the OEP information will be returned; if unsuccessful, False will be returned (reason: module not loaded, damaged, insufficient permissions).
 
 ```python
 >>> module.GetOEPFromName("kernelbase.dll")
@@ -1619,7 +1627,7 @@ Return value of interface function (JSON):
 
 #### GetOEPFromAddr
 
-根据内存地址获取该地址所属模块的原始入口点（OEP）。反向通过地址查模块入口，常用于崩溃分析、断点溯源。成功返回输入地址与 OEP；失败返回 False（原因：地址非法、模块损坏）。
+Get the original entry point (OEP) of the module to which the memory address belongs based on the memory address. Reverse lookup of module entry points by address is commonly used in crash analysis and breakpoint tracing. If successful, the input address and OEP will be returned; if unsuccessful, False will be returned (reason: invalid address, module corruption).
 
 ```python
 >>> module.GetOEPFromAddr("0x75994080")
@@ -1637,7 +1645,7 @@ Return value of interface function (JSON):
 
 #### GetPathFromName
 
-根据模块名称获取其在磁盘上的完整文件路径。用于验证模块来源、定位文件、确认版本。成功返回路径；失败返回 False（原因：模块未加载、名称无效、权限不足）。
+Get the complete file path on the disk based on the module name. This is used to verify the source of the module, locate the file, and confirm the version. If successful, the path will be returned; if unsuccessful, False will be returned (reason: module not loaded, invalid name, insufficient permissions).
 
 ```python
 >>> module.GetPathFromName("test.exe")
@@ -1653,7 +1661,7 @@ Return value of interface function (JSON):
 
 #### GetPathFromAddr
 
-根据内存地址获取该地址所属模块的磁盘完整路径。反向通过地址查文件位置，用于调试、溯源可疑地址。成功返回路径；失败返回 False（原因：地址非法、权限不足）。
+Get the complete disk path of the module to which the memory address belongs based on the memory address. Reverse the process to find the file location through the address, which is used for debugging and tracing suspicious addresses. If successful, return the path; if failed, return False (reason: illegal address, insufficient permissions).
 
 ```python
 >>> module.GetPathFromAddr("0x75994080")
@@ -1670,7 +1678,7 @@ Return value of interface function (JSON):
 
 #### GetNameFromAddr
 
-根据内存地址获取所属模块的名称（含扩展名）。用于崩溃分析、识别未知函数地址归属模块。成功返回模块名；失败返回 False（原因：地址非法、权限不足）。
+Get the name (including extension) of the module corresponding to a memory address. This is used for crash analysis and identifying the module to which an unknown function address belongs. If successful, the module name is returned; if unsuccessful, False is returned (reason: invalid address, insufficient permissions).
 
 ```python
 >>> module.GetNameFromAddr("0x75994080")
@@ -1687,7 +1695,7 @@ Return value of interface function (JSON):
 
 #### GetMainModulePath
 
-获取目标 x86 进程主模块（启动的 exe）的完整磁盘路径。无需参数，自动定位主程序。成功返回路径；失败返回 False（原因：进程未运行、损坏、权限不足）。
+Obtain the complete disk path of the target x86 process's main module (the launched exe). No parameters are required, and the main program will be automatically located. If successful, the path will be returned; if unsuccessful, False will be returned (reason: process not running, corrupted, insufficient permissions).
 
 ```python
 >>> module.GetMainModulePath()
@@ -1703,7 +1711,7 @@ Return value of interface function (JSON):
 
 #### GetMainModuleSize
 
-获取进程主模块的内存大小。无需参数，快速查看主程序内存占用。成功返回大小；失败返回 False。
+Get the memory size of the process's main module. No parameters are required. Quickly view the main program's memory usage. If successful, return the size; if failed, return False.
 
 ```python
 >>> module.GetMainModuleSize()
@@ -1719,7 +1727,7 @@ Return value of interface function (JSON):
 
 #### GetMainModuleName
 
-获取进程主模块名称（含.exe）。无需参数，快速识别调试目标。成功返回名称；失败返回 False。
+Get the name (including extension) of the process's main module. No parameters are required. Quickly identify the debug target. If successful, return the name; if failed, return False.
 
 ```python
 >>> module.GetMainModuleName()
@@ -1735,7 +1743,7 @@ Return value of interface function (JSON):
 
 #### GetMainModuleEntry
 
-获取主模块原始入口点（OEP）。无需参数，快速定位程序执行起点。成功返回 OEP；失败返回 False。
+Get the original entry point (OEP) of the process's main module. No parameters are required. Quickly locate the program execution start. If successful, return the OEP; if failed, return False.
 
 ```python
 >>> module.GetMainModuleEntry()
@@ -1751,7 +1759,7 @@ Return value of interface function (JSON):
 
 #### GetMainModuleBase
 
-获取主模块基地址。无需参数，用于偏移计算、调试。成功返回基址；失败返回 False。
+Get the load base address of the process's main module in memory. No parameters are required. If successful, return the base address; if failed, return False.
 
 ```python
 >>> module.GetMainModuleBase()
@@ -1767,7 +1775,7 @@ Return value of interface function (JSON):
 
 #### GetModuleAt
 
-基于调试器接口 DbgGetModuleAt，根据地址获取模块名。与 GetNameFromAddr 功能类似，但底层依赖调试器 API，边界情况结果可能不同。用于调试场景快速识别地址归属模块。
+Like the GetNameFromAddr function, but it relies on the debugger API and may return different results in edge cases. Use it for quick identification of the module that contains a specific address in a debug scenario.
 
 ```python
 >>> module.GetModuleAt("0x77D380F7")
@@ -1784,7 +1792,7 @@ Return value of interface function (JSON):
 
 #### GetWindowHandle
 
-获取调试器自身主窗口的句柄（HWND），不是被调试进程的窗口。用于操作调试器窗口。成功返回句柄；失败返回 False。
+Get the handle (HWND) of the debugger's main window. Not the window of the debugged process. Used for operations on the debugger window. If successful, return the handle; if failed, return False.
 
 ```python
 >>> module.GetWindowHandle()
@@ -1801,7 +1809,7 @@ Return value of interface function (JSON):
 
 #### GetInfoFromAddr
 
-根据内存地址一次性获取该模块的完整信息：基址、大小、节数量、名称、路径。一站式信息查询，适合逆向、取证、调试。
+Obtain complete information about the module at once based on its memory address: base address, size, number of sections, name, and path. One-stop information query, suitable for reverse engineering, forensics, and debugging.
 
 ```python
 >>> module.GetInfoFromAddr("0x77D380F7")
@@ -1824,7 +1832,7 @@ Return value of interface function (JSON):
 
 #### GetInfoFromName
 
-根据模块名称一次性获取完整信息。一站式查询，比单独调用多个接口更高效。注意：原函数标注存在一致性问题，建议交叉验证。
+Obtain complete information about the module at once based on its name: base address, size, number of sections, name, and path. One-stop information query, suitable for reverse engineering, forensics, and debugging.
 
 ```python
 >>> module.GetInfoFromName("kernelbase.dll")
@@ -1847,7 +1855,7 @@ Return value of interface function (JSON):
 
 #### GetAllModule
 
-获取进程中所有已加载模块的完整列表（主程序 + 所有 DLL）。用于分析模块依赖、逆向、调试、查杀。成功返回模块总数与详细列表。
+Obtain a comprehensive list of all loaded modules (main program + all DLLs) during the process. This is used for analyzing module dependencies, reverse engineering, debugging, and virus scanning. Upon success, the total number of modules and a detailed list will be returned.
 
 ```python
 >>> module.GetAllModule()
@@ -1879,7 +1887,7 @@ Return value of interface function (JSON):
 
 #### SectionCountFromName
 
-根据模块名获取 PE 文件节数量。用于分析程序结构、加壳检测、逆向分析。
+Get the number of PE file sections based on the module name. Used for analyzing program structure, shell detection, and reverse analysis.
 
 ```python
 >>> module.SectionCountFromName("kernelbase.dll")
@@ -1895,7 +1903,7 @@ Return value of interface function (JSON):
 
 #### GetMainModuleSectionCount
 
-获取主模块的 PE 节数量。无需参数，快速分析程序结构。
+Get the number of PE sections in the main module. No parameters required, for quick analysis of program structure.
 
 ```python
 >>> module.GetMainModuleSectionCount()
@@ -1911,7 +1919,7 @@ Return value of interface function (JSON):
 
 #### SectionCountFromAddr
 
-根据地址获取所属模块的节数量。用于未知模块的结构分析。
+Obtain the number of sections belonging to a module based on its address. This is used for structural analysis of unknown modules.
 
 ```python
 >>> module.SectionCountFromAddr("0x77D380F7")
@@ -1928,7 +1936,7 @@ Return value of interface function (JSON):
 
 #### GetSectionFromAddr
 
-根据模块地址与节索引，获取单个节详细信息（地址、大小、名称）。
+Based on the module address and section index, obtain detailed information about a single section (address, size, name).
 
 ```python
 >>> module.GetSectionFromAddr("0x75840000",0)
@@ -1951,7 +1959,7 @@ Return value of interface function (JSON):
 
 #### GetSectionFromName
 
-根据模块名与节索引获取单个节信息。
+Based on the module name and section index, obtain detailed information about a single section (address, size, name).
 
 ```python
 >>> module.GetSectionFromName("kernelbase.dll",1)
@@ -1973,7 +1981,7 @@ Return value of interface function (JSON):
 
 #### GetSectionListFromAddr
 
-根据地址获取模块所有节的完整列表。
+Obtain a complete list of all sections in a module based on its address.
 
 ```python
 >>> module.GetSectionListFromAddr("0x75AB8000")
@@ -2005,7 +2013,7 @@ Return value of interface function (JSON):
 
 #### GetSectionListFromName
 
-根据模块名获取所有节列表。
+Obtain a complete list of all sections in a module based on its name.
 
 ```python
 >>> module.GetSectionListFromName("test.exe")
@@ -2036,7 +2044,7 @@ Return value of interface function (JSON):
 
 #### GetMainModuleInfoEx
 
-获取主模块完整扩展信息（基址、大小、节数、名称、路径）。
+Obtain the complete extended information of the main module (base address, size, section count, name, path).
 
 ```python
 >>> module.GetMainModuleInfoEx()
@@ -2058,7 +2066,7 @@ Return value of interface function (JSON):
 
 #### GetSection
 
-根据地址获取模块所有节，功能同 GetSectionListFromAddr，统一返回格式。
+Function is functionally equivalent to GetSectionListFromAddr, with a unified response format.
 
 ```python
 >>> module.GetSection("0x77D380F1")
@@ -2086,7 +2094,7 @@ Return value of interface function (JSON):
 
 #### GetImport
 
-获取模块的导入表（从其他模块导入的函数）。用于分析依赖、API 挂钩、逆向。
+Obtain the import table of the module (functions imported from other modules). Used for analyzing dependencies, API hooking, and reverse engineering.
 
 ```python
 >>> module.GetImport("test.exe")
@@ -2127,7 +2135,7 @@ Return value of interface function (JSON):
 
 #### GetExport
 
-获取模块的导出表（提供给外部调用的函数）。用于分析 DLL 功能、动态调用、逆向。
+Obtain the export table of the module (functions callable by other modules). Used for analyzing DLL functions, dynamic calling, and reverse engineering.
 
 ```python
 >>> module.GetExport("kernelbase.dll")
@@ -2172,13 +2180,13 @@ Return value of interface function (JSON):
 }
 ```
 
-### 进程接口
+### Process Interface
 
-进程是程序的执行实例，它提供独立的内存空间和资源管理，并能并发执行多个任务；线程是进程内的执行单元，共享进程资源，实现并发执行和任务协作。
+A process is an execution instance of a program, which provides independent memory space and resource management, and can execute multiple tasks concurrently; a thread is an execution unit within a process, sharing process resources and enabling concurrent execution and task collaboration.
 
 #### GetHandle
 
-检索目标 / 调试的 x86 进程的进程句柄（Windows 唯一标识符）。调用大多数与进程交互的 Windows API 函数（如读写内存、管理线程）都需要进程句柄。与 mod.GetWindowHandle（返回调试器窗口句柄）不同，此函数返回进程本身的句柄，可对目标进程的内存和资源执行底层操作。成功时返回包含十六进制 / 十进制格式句柄及上下文的字典；失败返回 false（常见原因：目标进程未运行、权限不足、检索过程中进程终止）。
+Retrieve target/debugging x86 process handle (a unique identifier in Windows). Most Windows API functions that interact with processes, such as reading and writing memory and managing threads, require a process handle. Unlike mod.GetWindowHandle (which returns the handle of the debugger window), this function returns the handle of the process itself, allowing low-level operations on the target process's memory and resources. Upon success, a dictionary containing the handle in hexadecimal/decimal format and context is returned; upon failure, false is returned (common reasons: target process not running, insufficient permissions, process termination during retrieval).
 
 ```python
 >>> process.GetHandle()
@@ -2194,7 +2202,7 @@ Return value of interface function (JSON):
 
 #### GetPid
 
-检索目标 / 调试的 x86 进程的进程 ID（PID）。PID 是 Windows 操作系统为每个运行进程分配的唯一数字标识符，用于区分不同进程（如区分两个记事本实例）。与进程句柄（用于进程交互）不同，PID 是系统级标识符，在进程生命周期内持续有效。成功时返回包含十进制 / 十六进制格式 PID 及上下文的字典；失败返回 false（常见原因：目标进程未运行、调试器未附加进程、检索过程中进程终止）。
+Retrieve the process ID (PID) of the target/debugging x86 process. PID is a unique numerical identifier assigned by the Windows operating system to each running process, used to distinguish between different processes (such as distinguishing between two instances of Notepad). Unlike process handles (used for process interaction), PID is a system-level identifier that remains valid throughout the process's lifecycle. Upon success, a dictionary containing the PID in decimal/hexadecimal format and context is returned; upon failure, false is returned (common reasons: target process not running, debugger not attached to process, process terminated during retrieval).
 
 ```python
 >>> process.GetPid()
@@ -2210,7 +2218,7 @@ Return value of interface function (JSON):
 
 #### GetPeb
 
-以进程 ID（PID）为输入，检索指定运行中 x86 进程的进程环境块（PEB）内存地址。PEB 是 Windows 用户态核心数据结构，存储进程专属元数据（如已加载模块、堆信息、环境变量）。该函数对底层调试、逆向工程和取证分析至关重要 —— 需直接访问 PEB 以检查或修改进程内部状态。成功时返回包含十六进制 / 十进制格式 PEB 地址及上下文的字典；失败返回 false（常见原因：PID 无效、目标进程未运行、权限不足）。
+Taking the process ID (PID) as input, this function retrieves the memory address of the Process Environment Block (PEB) for the specified running x86 process. The PEB is a core data structure in Windows user mode, storing process-specific metadata such as loaded modules, heap information, and environment variables. This function is crucial for low-level debugging, reverse engineering, and forensic analysis - direct access to the PEB is required to inspect or modify the internal state of the process. Upon success, a dictionary containing the PEB address in hexadecimal/decimal format and context is returned; upon failure, false is returned (common reasons: invalid PID, target process not running, insufficient permissions).
 
 ```python
 >>> process.GetPeb("11328")
@@ -2227,7 +2235,7 @@ Return value of interface function (JSON):
 
 #### GetThreadList
 
-检索目标 / 调试的 x86 进程中所有活跃线程的完整列表，及每个线程的详细元数据（如线程 ID、执行状态、CPU 使用率）。“线程” 是进程内独立的执行单元 —— 多个线程共享进程内存，但运行独立的指令流（如 UI 主线程、后台工作线程）。该函数对调试（跟踪线程行为）、逆向工程（分析多线程逻辑）、故障排查（识别卡死 / 高资源占用线程）至关重要。成功时返回包含线程数量和嵌套线程详情列表的字典；失败返回 false（常见原因：未附加进程、目标进程终止、枚举线程权限不足）。
+Retrieve the complete list of all active threads within the x86 process targeted for debugging, along with detailed metadata for each thread, such as thread ID, execution status, and CPU usage. A "thread" is an independent execution unit within a process - multiple threads share process memory but run independent instruction streams (such as the UI main thread and background worker threads). This function is crucial for debugging (tracking thread behavior), reverse engineering (analyzing multithreading logic), and troubleshooting (identifying stuck/high-resource-consuming threads). Upon success, a dictionary containing the number of threads and a detailed list of nested threads is returned; upon failure, false is returned (common reasons: process not attached, target process terminated, insufficient permissions to enumerate threads).
 
 ```python
 >>> process.GetThreadList()
@@ -2266,7 +2274,7 @@ Return value of interface function (JSON):
 
 #### GetThreadHandle
 
-检索目标 / 调试的 x86 进程中当前选中线程的线程句柄（Windows 唯一标识符）。调用与特定线程交互的 Windows API 函数（如挂起 / 恢复执行、读取线程上下文）需要线程句柄。与 proc.GetHandle ()（返回进程句柄）或 mod.GetWindowHandle ()（返回调试器窗口句柄）不同，此函数仅针对单个线程 —— 即调试器当前聚焦的线程（如 GetThreadList 中高亮的线程）。成功时返回包含十六进制 / 十进制格式线程句柄及上下文的字典；失败返回 false（常见原因：未选中线程、目标进程 / 线程终止、权限不足）。
+Retrieve the thread handle (a unique identifier in Windows) of the currently selected thread within the x86 process being debugged. To call Windows API functions that interact with a specific thread (such as suspending/resuming execution, reading thread context), a thread handle is required. Unlike proc.GetHandle() (which returns the process handle) or mod.GetWindowHandle() (which returns the debugger window handle), this function targets a single thread only - specifically, the thread currently in focus for the debugger (such as the highlighted thread in GetThreadList). Upon success, a dictionary containing the thread handle in hexadecimal/decimal format and the context is returned; upon failure, false is returned (common reasons: no thread selected, target process/thread terminated, insufficient permissions).
 
 ```python
 >>> process.GetThreadHandle()
@@ -2282,7 +2290,7 @@ Return value of interface function (JSON):
 
 #### GetMainThreadId
 
-检索目标 / 调试的 x86 进程的主线程 ID（TID）。“主线程” 是进程启动时 Windows 内核创建的初始线程 —— 负责执行进程入口点（如控制台程序的 main、GUI 程序的 WinMain），通常管理核心逻辑（如 UI 渲染、事件循环）。与 proc.GetThreadList ()（返回所有线程）不同，此函数仅聚焦主线程，简化仅需初始线程标识符的场景。成功时返回包含十进制 / 十六进制格式主线程 TID 及上下文的字典；失败返回 false（常见原因：未附加进程、主线程终止、进程退出）。
+Retrieve the main thread ID (TID) of the x86 process targeted for debugging. The "main thread" is the initial thread created by the Windows kernel when the process starts - responsible for executing the process entry point (such as main for console programs, or WinMain for GUI programs), and typically managing core logic (such as UI rendering, event looping). Unlike proc.GetThreadList() (which returns all threads), this function focuses solely on the main thread, simplifying scenarios where only the identifier of the initial thread is required. Upon success, a dictionary containing the main thread TID in decimal/hexadecimal format and context is returned; upon failure, false is returned (common reasons: process not attached, main thread terminated, process exited).
 
 ```python
 >>> process.GetMainThreadId()
@@ -2298,7 +2306,7 @@ Return value of interface function (JSON):
 
 #### GetTid
 
-检索目标 / 调试的 x86 进程中当前选中线程的线程 ID（TID）。TID 是 Windows 内核为每个活跃线程分配的系统级唯一数字标识符，用于区分进程内的单个线程（如主线程与工作线程）。与 proc.GetMainThreadId ()（针对进程初始线程）不同，GetTid () 聚焦调试器正在检查或控制的线程。成功时返回包含十进制 / 十六进制格式 TID 及上下文的字典；失败返回 false（常见原因：未选中线程、目标线程 / 进程终止、权限不足）。
+Retrieve the thread ID (TID) of the currently selected thread within the x86 process targeted for debugging. The TID is a system-level unique numerical identifier assigned by the Windows kernel to each active thread, used to distinguish individual threads within a process (such as the main thread and worker threads). Unlike proc.GetMainThreadId() (which targets the process's initial thread), GetTid() focuses on the thread being examined or controlled by the debugger. Upon success, a dictionary containing the TID in decimal/hexadecimal format and context is returned; upon failure, false is returned (common reasons: no thread selected, target thread/process terminated, insufficient permissions).
 
 ```python
 >>> process.GetTid()
@@ -2314,7 +2322,7 @@ Return value of interface function (JSON):
 
 #### GetTeb
 
-以线程 ID（TID）为输入，检索 x86 进程中指定活跃线程的线程环境块（TEB）内存地址。TEB 是 Windows 用户态核心数据结构，存储线程专属元数据（如栈边界、线程本地存储、异常处理数据）—— 与进程级的 PEB（进程环境块）不同。该函数对底层调试、逆向工程和反调试分析至关重要，需直接访问线程内部状态时会用到。成功时返回包含十六进制 / 十进制格式 TEB 地址及上下文的字典；失败返回 false（常见原因：TID 无效、目标线程 / 进程终止、权限不足）。
+Taking the thread ID (TID) as input, this function retrieves the memory address of the thread environment block (TEB) for the specified active thread in an x86 process. The TEB is a core data structure in Windows user mode, storing thread-specific metadata (such as stack boundaries, thread local storage, exception handling data) - distinct from the process-level PEB (process environment block). This function is crucial for low-level debugging, reverse engineering, and anti-debugging analysis, and is used when direct access to the internal state of threads is required. Upon success, a dictionary containing the TEB address in hexadecimal/decimal format and context is returned; upon failure, false is returned (common reasons: invalid TID, target thread/process termination, insufficient permissions).
 
 ```python
 >>> process.GetTeb("11432")
@@ -2329,13 +2337,13 @@ Return value of interface function (JSON):
 }
 ```
 
-### 脚本接口
+### Script Functions
 
-脚本函数可以将x64dbg命令与Python语言集成，并提供强大的自动化和定制化功能。使用Python脚本可以自动执行调试任务，定制分析工具，且具有用户友好性和跨平台性，为逆向工程和安全研究提供了更高效、更灵活的解决方案。
+Script functions can integrate x64dbg commands with the Python language, offering robust automation and customization capabilities. By utilizing Python scripts, debugging tasks can be executed automatically, analysis tools can be customized, and the resulting system is user-friendly and cross-platform, providing a more efficient and flexible solution for reverse engineering and security research.
 
 #### RunCmd
 
-在目标/调试的x86进程的上下文中执行脚本命令，从而能够与调试器或分析工具的脚本环境进行灵活交互。此函数作为自定义或预定义命令的“通用执行器”，支持诸如查询模块信息、操作内存或自动化调试任务等工作流程。与专用函数（例如，mod.GetBase、proc.GetPid）不同，RunCmd接受任意命令字符串，使其高度适应复杂或一次性操作。执行成功后，它将返回执行确认；执行失败时，它将返回false（常见原因：命令语法错误、函数未定义或运行时错误）。
+Execute script commands within the context of the targeted/debugging x86 process, enabling flexible interaction with the scripting environment of debuggers or analysis tools. This function serves as a "general executor" for custom or predefined commands, supporting workflows such as querying module information, manipulating memory, or automating debugging tasks. Unlike specialized functions (e.g., mod.GetBase, proc.GetPid), RunCmd accepts arbitrary command strings, making it highly adaptable to complex or one-time operations. Upon successful execution, it returns an execution confirmation; upon failure, it returns false (common reasons: command syntax error, function undefined, or runtime error).
 
 ```python
 >>> script.RunCmd("mod.base(0x77D380E5)")
@@ -2349,7 +2357,7 @@ Return value of interface function (JSON):
 
 #### RunCmdRef
 
-在目标/调试的x86进程的上下文中执行脚本命令，并检索该命令的返回值，通过捕获执行操作的输出来扩展script.RunCmd的功能。此函数对于那些不仅需要执行命令（例如，查询模块的基地址）还需要将结果用于后续操作（例如，计算偏移量、设置断点）的工作流至关重要。与仅确认执行的RunCmd不同，RunCmdRef以十进制和十六进制格式返回命令的输出，使其成为动态分析和自动化不可或缺的工具。如果成功，它将返回一个包含命令结果的结构化字典；如果失败，它将返回false（常见原因：命令语法错误、函数未定义、命令无返回值或运行时错误）。
+Execute script commands within the context of the targeted/debugging x86 process and retrieve the return value of the command, extending the functionality of script.RunCmd by capturing the output of the executed operation. This function is crucial for workflows that require not only executing commands (e.g., querying the base address of a module) but also utilizing the results for subsequent operations (e.g., calculating offsets, setting breakpoints). Unlike RunCmd, which only confirms execution, RunCmdRef returns the output of the command in both decimal and hexadecimal formats, making it an indispensable tool for dynamic analysis and automation. If successful, it returns a structured dictionary containing the command results; if unsuccessful, it returns false (common reasons: command syntax error, function undefined, command has no return value, or runtime error).
 
 ```python
 >>> script.RunCmdRef("mod.base(0x77D380E5)")
@@ -2364,13 +2372,13 @@ Return value of interface function (JSON):
 }
 ```
 
-### 图形化接口
+### GUI Functions
 
-图形用户界面（GUI）是一种通过图形方式与计算机程序交互的用户界面。它使用图形元素（如窗口、按钮、菜单等）来表示程序的功能和操作。用户可以通过鼠标和键盘等输入设备与这些图形元素进行交互，以完成各种任务。
+A graphical user interface (GUI) is a type of user interface that interacts with computer programs through graphical means. It uses graphical elements (such as windows, buttons, menus, etc.) to represent the functions and operations of the program. Users can interact with these graphical elements through input devices such as a mouse and keyboard to complete various tasks.
 
 #### SetComment
 
-为目标 / 调试的 x86 进程 GUI 中指定内存地址添加用户自定义文本注释（如调试器反汇编 / 内存视图）。该函数通过为地址附加易读的上下文信息（标记函数入口、崩溃位置、关键变量）提升调试易用性。与底层函数（如 mem.Write、GetTeb）不同，SetComment 仅为 GUI 标注工具 —— 不修改进程内存 / 状态，仅改变调试器对该地址的视觉展示。成功时返回注释设置确认及目标地址；失败返回 false（常见原因：地址无效、注释为空、调试器 GUI 未初始化）。
+Adds user-defined text comments to the specified memory address in the GUI for x86 processes targeted for debugging (such as debugger disassembly/memory view). This function enhances debugging usability by appending readable contextual information to the address (marking function entry, crash location, key variables). Unlike low-level functions (such as mem.Write, GetTeb), SetComment is only a GUI annotation tool - it does not modify process memory/state, but only changes the debugger's visual display of the address. Upon success, it returns the comment setting confirmation and the target address; upon failure, it returns false (common reasons: invalid address, empty comment, debugger GUI not initialized).
 
 ```python
 >>> gui.SetComment("0x77D380E5","hello")
@@ -2386,7 +2394,7 @@ Return value of interface function (JSON):
 
 #### Log
 
-将用户自定义文本消息写入调试器日志窗口，用于在调试 / 分析会话中记录笔记、进度更新或关键观察。该函数是轻量级的 GUI 日志工具 —— 与 SetComment（绑定注释到特定地址）不同，Log 向集中式日志添加通用消息，适合跟踪工作流程、记录变量值、标记重要事件。不修改目标进程内存 / 状态，仅影响调试器日志输出。成功时返回日志消息确认；失败返回 false（常见原因：消息为空、日志窗口不可用、文本格式无效）。
+Writes user-defined text messages to the debugger log window, intended for recording notes, progress updates, or key observations during debugging/analysis sessions. This function serves as a lightweight GUI logging tool - unlike SetComment (which binds comments to specific addresses), Log adds generic messages to a centralized log, making it suitable for tracking workflows, recording variable values, and marking important events. It does not modify the memory/state of the target process, and only affects the debugger log output. Upon success, it returns a confirmation of the log message; upon failure, it returns false (common reasons: message is empty, log window is unavailable, invalid text format).
 
 ```python
 >>> gui.Log("hello")
@@ -2401,7 +2409,7 @@ Return value of interface function (JSON):
 
 #### AddStatusBarMessage
 
-向调试器状态栏添加临时文本消息 —— 状态栏是调试器窗口底部的小型持久面板，用于展示短期、即时反馈。与 gui.Log（写入可滚动的持久日志）或 gui.SetComment（绑定到内存地址）不同，该函数提供快速可见的更新，不会占用长期记录空间。适合确认常规操作（如 “注释已保存”）或展示实时状态（如 “内存读取完成”），无需用户查看单独的日志窗口。成功时返回消息确认；失败返回 false（常见原因：消息为空、GUI 未初始化、状态栏不可用）。
+Add a temporary text message to the debugger status bar - The status bar is a small persistent panel at the bottom of the debugger window, used to display short-term, immediate feedback. Unlike gui.Log (which writes to a scrollable persistent log) or gui.SetComment (which binds to a memory address), this function provides quick and visible updates without occupying long-term record space. It is suitable for confirming regular operations (such as "Comment saved") or displaying real-time status (such as "Memory read complete"), without requiring users to view a separate log window. It returns a message confirmation on success; false on failure (common reasons: message is empty, GUI is not initialized, status bar is unavailable).
 
 ```python
 >>> gui.AddStatusBarMessage("hello")
@@ -2416,7 +2424,7 @@ Return value of interface function (JSON):
 
 #### ClearLog
 
-清空调试器日志窗口的所有条目，将日志重置为空状态。该函数是日志整理工具 —— 与 gui.Log（添加条目）或 gui.SetComment（标注地址）不同，ClearLog 专注于清理现有日志数据，保持调试会话整洁。仅影响调试器 GUI 中显示的内存日志；不删除手动导出的日志文件（如 .log 文件），也不修改目标进程状态。成功时返回日志清空确认；失败返回 false（常见原因：日志窗口不可用、GUI 未初始化）。
+Clears all entries in the debugger's log window, resetting the log to an empty state. Unlike gui.Log (adding entries) or gui.SetComment (annotating addresses), this function is a log tidying tool, focusing on cleaning up existing log data to keep the debugging session tidy. It only affects the memory log displayed in the debugger GUI; it does not delete manually exported log files (such as .log files), nor does it modify the state of the target process. Upon success, it returns a confirmation of log emptying; upon failure, it returns false (common reasons: log window is unavailable, GUI is not initialized).
 
 ```python
 >>> gui.ClearLog()
@@ -2430,7 +2438,7 @@ Return value of interface function (JSON):
 
 #### GetInput
 
-在调试器 GUI 中显示交互式输入对话框，收集用户文本输入，支持调试流程的动态、用户驱动调整。与输出类 GUI 函数（如 gui.Log、gui.AddStatusBarMessage）或标注工具（如 gui.SetComment）不同，GetInput 是用户输入机制 —— 会暂停调试器直至用户输入文本并点击 “确定”（或取消），适合收集无法预定义的变量值、偏移量或自定义标签。成功（用户点击 “确定”）返回输入详情；失败（用户取消或 GUI 错误）返回 false。
+Display an interactive input dialog box in the debugger GUI to collect user text input, supporting dynamic and user-driven adjustments to the debugging process. Unlike output-type GUI functions (such as gui.Log, gui.AddStatusBarMessage) or annotation tools (such as gui.SetComment), GetInput is a user input mechanism - it pauses the debugger until the user enters text and clicks "OK" (or cancels), suitable for collecting variable values, offsets, or custom labels that cannot be predefined. Success (user clicks "OK") returns the input details; failure (user cancels or GUI error) returns false.
 
 ```python
 >>> gui.GetInput("input value")
@@ -2447,7 +2455,7 @@ Return value of interface function (JSON):
 
 #### Confirm
 
-调试器 GUI 中的交互式确认工具。核心功能是弹出带 “是 / 否” 选项的对话框，请求用户确认特定操作（如高危内存修改、线程终止）并返回用户选择。会暂停调试流程直至用户点击 “是” 或 “否”，避免误操作导致的调试风险，是保障交互式调试安全的关键函数。
+Interactive confirmation tool in the debugger GUI. Its core function is to pop up a dialog box with "Yes/No" options, requesting the user to confirm specific operations (such as high-risk memory modification, thread termination) and return the user's choice. It will pause the debugging process until the user clicks "Yes" or "No", avoiding debugging risks caused by misoperations and serving as a key function to ensure the safety of interactive debugging.
 
 ```python
 >>> gui.Confirm("confirm value")
@@ -2463,7 +2471,7 @@ Return value of interface function (JSON):
 
 #### ShowMessage
 
-调试器中的 GUI 函数，显示包含指定文本的模态消息对话框。核心作用是向用户展示重要信息、通知或警告，需手动交互关闭 —— 用户必须点击 “确定” 才能关闭对话框，且在此之前调试器流程会暂停。
+The GUI function in the debugger displays a modal message dialog box containing the specified text. Its core function is to present important information, notifications, or warnings to the user, requiring manual interaction to close - the user must click "OK" to dismiss the dialog box, and the debugger process will pause until then.
 
 ```python
 >>> gui.ShowMessage("message")
@@ -2478,7 +2486,7 @@ Return value of interface function (JSON):
 
 #### AddArgumentBracket
 
-调试器 GUI 函数，通过在反汇编 / 内存视图中添加括号或高亮，可视化标记连续的内存地址范围。主要用途是将相关地址（通常是函数参数、指令序列、数据块）分组展示，提升代码 / 内存布局的可读性，突出逻辑关联。
+The debugger GUI function visually marks continuous memory address ranges by adding parentheses or highlighting in the disassembly/memory view. Its main purpose is to group and display related addresses (usually function parameters, instruction sequences, data blocks), enhancing the readability of the code/memory layout and highlighting logical connections.
 
 ```python
 >>> gui.AddArgumentBracket("0x77D380E3","0x77D380E8")
@@ -2492,7 +2500,7 @@ Return value of interface function (JSON):
 
 #### DelArgumentBracket
 
-调试器 GUI 函数，用于移除之前通过 gui.AddArgumentBracket 添加的参数括号标记。通过指定关键地址（通常是原括号范围的起始地址）定位并删除反汇编 / 内存视图中对应的可视化分组，帮助保持调试界面整洁，清除过时 / 错误标注。
+The debugger GUI function is used to remove the parameter bracket tags previously added through gui.AddArgumentBracket. By specifying the key address (usually the starting address of the original bracket range), it locates and deletes the corresponding visual grouping in the disassembly/memory view, helping to keep the debugging interface tidy and clear outdated/erroneous annotations.
 
 ```python
 >>> gui.DelArgumentBracket("0x77D380E3")
@@ -2506,7 +2514,7 @@ Return value of interface function (JSON):
 
 #### AddFunctionBracket
 
-调试器 GUI 函数，可视化标记与函数机器码对应的连续内存地址范围。在调试器的机器码 / 反汇编视图中添加括号或高亮，明确划分函数的起始和结束位置，提升底层代码的可读性，简化导航。
+The debugger GUI function visualizes the continuous memory address range corresponding to the machine code of the marked function. By adding parentheses or highlighting in the debugger's machine code/disassembly view, it clearly delineates the start and end positions of the function, enhancing the readability of the underlying code and simplifying navigation.
 
 ```python
 >>> gui.AddFunctionBracket("0x77D380E3","0x77D380E8")
@@ -2520,7 +2528,7 @@ Return value of interface function (JSON):
 
 #### DelFunctionBracket
 
-调试器 GUI 函数，移除之前通过 gui.AddFunctionBracket 添加的函数括号标记。以函数起始地址为标识，删除机器码 / 反汇编视图中标记函数代码范围的括号，通过清除过时 / 错误的函数边界标记保持调试界面整洁。
+The debugger GUI function removes the function bracket tags previously added through gui.AddFunctionBracket. It identifies the function starting address and deletes the brackets marking the function code range in the machine code/disassembly view, keeping the debugging interface clean by removing outdated/incorrect function boundary tags.
 
 ```python
 >>> gui.DelFunctionBracket("0x77D380E3")
@@ -2535,7 +2543,7 @@ Return value of interface function (JSON):
 
 #### AddLoopBracket
 
-调试器 GUI 函数，在反汇编视图中可视化标记与循环结构对应的连续内存地址范围。添加独特的括号或高亮划分循环指令的起始和结束位置，便于在底层分析中识别重复代码模式（如 for 循环、while 循环）。
+The debugger GUI function visualizes the continuous memory address range corresponding to the loop structure in the disassembly view. It adds unique brackets or highlights to delineate the start and end positions of loop instructions, facilitating the identification of repetitive code patterns (such as for loops, while loops) in low-level analysis.
 
 ```python
 >>> gui.AddLoopBracket("0x77D380E3","0x77D380E8")
@@ -2549,7 +2557,7 @@ Return value of interface function (JSON):
 
 #### DelLoopBracket
 
-调试器 GUI 函数，移除之前通过 gui.AddLoopBracket 添加的循环括号标记。以循环的起始和结束地址为标识，删除反汇编视图中标记循环代码范围的括号，通过清除过时 / 错误的循环边界标记保持调试界面清晰。
+The debugger GUI function removes the loop bracket markers previously added through gui.AddLoopBracket. It identifies the start and end addresses of the loop and deletes the brackets marking the loop code range in the disassembly view. By clearing outdated/incorrect loop boundary markers, the debugging interface is kept clear.
 
 ```python
 >>> gui.DelLoopBracket("1","0x77D380E3")
@@ -2564,7 +2572,7 @@ Return value of interface function (JSON):
 
 #### SetLabel
 
-调试器 GUI 函数，为特定内存地址附加自定义、易读的文本标签。与 gui.SetComment（添加描述性注释）等补充标注不同，标签用于在反汇编视图中替换 / 补充原始十六进制地址 —— 让关键地址（如函数入口、核心变量）在调试 / 逆向过程中更易识别和重复引用。
+The debugger GUI function attaches custom, readable text labels to specific memory addresses. Unlike supplementary annotations such as gui.SetComment (which adds descriptive comments), labels are used to replace/supplement the original hexadecimal addresses in the disassembly view - making key addresses (such as function entries, core variables) easier to identify and reference repeatedly during debugging/reversing.
 
 ```python
 >>> gui.SetLabel("0x77D380E3","hello")
@@ -2580,7 +2588,7 @@ Return value of interface function (JSON):
 
 #### ResolveLabel
 
-调试器 GUI 函数，执行 gui.SetLabel 的反向操作：接收预定义的标签名（如 "hello"），检索其绑定的对应内存地址。无需记忆 / 手动查询原始十六进制地址，可在调试 / 脚本执行中快速定位标注点（如函数入口、核心变量）。
+The debugger GUI function performs the inverse operation of gui.SetLabel: it receives a predefined label name (such as "hello") and retrieves the corresponding memory address it is bound to. Without the need to memorize or manually query the original hexadecimal address, it allows for quick positioning of annotation points (such as function entries and core variables) during debugging or script execution.
 
 ```python
 >>> gui.ResolveLabel("hello")
@@ -2596,7 +2604,7 @@ Return value of interface function (JSON):
 
 #### ClearAllLabels
 
-调试器 GUI 函数，删除当前调试会话中所有通过 gui.SetLabel 设置的用户自定义标签。将调试器的标签注册表重置为空状态，移除所有绑定到内存地址的自定义标签 —— 这是批量清理标签的工具，但会不可逆地删除现有标注。
+The debugger GUI function deletes all user-defined labels set through gui.SetLabel in the current debugging session. It resets the debugger's label registry to an empty state, removing all custom labels bound to memory addresses. This is a tool for batch label cleanup, but it will irreversibly delete existing annotations.
 
 ```python
 >>> gui.ClearAllLabels()
@@ -2609,36 +2617,36 @@ Return value of interface function (JSON):
 }
 ```
 
-无论您是需高效逆向二进制样本的逆向工程师、研究恶意软件行为的反病毒专家，还是查找软件漏洞的漏洞分析师，它都能通过自动化功能替代重复的手动操作，将繁重的调试和分析工作转化为可复用的脚本逻辑，从而显著提高工作效率和分析准确性。
+Whether you are a reverse engineer who needs to efficiently reverse binary samples, an antivirus expert who studies malware behavior, or a vulnerability analyst who seeks software vulnerabilities, it can replace repetitive manual operations through automation, transforming tedious debugging and analysis tasks into reusable script logic, thereby significantly improving work efficiency and analysis accuracy.
 
-## AI赋能与MCP能力
+## Use of MCP
 
-通过 MCP 协议，可将整套调试能力开放给 AI 大模型，实现：
+Through the MCP protocol, the entire debugging capability can be opened up to AI large models, enabling:
 
- - 自动化二进制样本智能分析
- - 智能断点、智能跟踪与执行路径分析
- - 自动化漏洞检测与验证
- - 恶意代码行为溯源与家族归类
- - 自主调试 + 智能决策的新一代逆向流程
+ - Intelligent analysis of automated binary samples
+ - Intelligent breakpoint, intelligent tracking, and execution path analysis
+ - Automated vulnerability detection and verification
+ - Traceability and family classification of malicious code behavior
+ - A new generation of reverse process featuring autonomous debugging and intelligent decision-making
 
-让安全研究人员从重复、繁琐的手动分析中解放，真正实现AI + 逆向工程的深度融合。
+Free security researchers from repetitive and tedious manual analysis, and truly achieve the deep integration of AI and reverse engineering.
 
-切换到`LyScript/mcp`目录下，并执行`python main.py`运行`MCP Server`服务端。
+Switch to the `LyScript/mcp` directory and run `python main.py` to start the `MCP Server` service.
 
 <img width="1222" height="509" alt="image" src="https://github.com/user-attachments/assets/0f148513-1c9b-45ed-b0c4-72fe7b38b41a" />
 
-打开`Cherry Studio`工具，在菜单中配置`MCP`服务器地址及端口信息，并打开`MCP`开关，如下图。
+Open `Cherry Studio` tool in the menu to configure the `MCP` server address and port information, and enable the `MCP` switch as shown below:
 
 <img width="1452" height="1002" alt="image" src="https://github.com/user-attachments/assets/a4960c5a-1f9b-4f80-9d56-5d714bf195fd" />
 
-配置大模型，选择深度求索大模型，并开启。
+Configure the large model, select the deepseek large model, and enable it.
 
 <img width="1450" height="1004" alt="image" src="https://github.com/user-attachments/assets/050ca08e-bbac-4938-abd1-9a01d418ace8" />
 
-选择MCP及大模型，并设置如下。
+Select `MCP` and the large model, and set them as follows:
 
 <img width="1454" height="1002" alt="image" src="https://github.com/user-attachments/assets/76b364b5-b9d6-4c6b-85dc-e72d8feb6b22" />
 
-最后就可以对大模型进行提问，例如打开`d://pec/win32.exe`并简单分析。
+Now you can ask the large model questions, for example, open `d://pec/win32.exe` and analyze it simply.
 
 <img width="2042" height="1081" alt="image" src="https://github.com/user-attachments/assets/a7bdbff1-612f-4a2b-ac20-7e9d3ccf747c" />
