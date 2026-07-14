@@ -1,0 +1,7 @@
+README.md
+setup.py
+LyScriptTools32/__init__.py
+LyScriptTools32.egg-info/PKG-INFO
+LyScriptTools32.egg-info/SOURCES.txt
+LyScriptTools32.egg-info/dependency_links.txt
+LyScriptTools32.egg-info/top_level.txt

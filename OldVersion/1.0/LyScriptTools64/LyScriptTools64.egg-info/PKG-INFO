@@ -1,0 +1,11 @@
+Metadata-Version: 1.2
+Name: LyScriptTools64
+Version: 1.0.6
+Summary: A powerful x64dbg remote debugging module tools
+Home-page: UNKNOWN
+Author: lyshark
+Author-email: me@lyshark.com
+License: MIT Licence
+Description: UNKNOWN
+Platform: any
+Requires-Python: >=3.6.0
