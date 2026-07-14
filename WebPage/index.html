@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LyScript AI - 赋能x64dbg的AI调试助手</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="./logo.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="./logo.ico">
+    <!-- 核心关键词优化 -->
+    <meta name="description" content="LyScript AI是面向x32/x64dbg的AI驱动MCP组件，通过智能分析、漏洞检测与恶意软件调查，加速逆向工程、漏洞挖掘进程，为安全研究提供高效调试助力">
+    <meta name="keywords" content="LyScript AI, x64dbg插件, AI调试助手, MCP组件, 逆向工程工具, 漏洞检测, 恶意软件分析, 安全研究工具">
+
+    <!-- 社交平台分享优化（Open Graph协议） -->
+    <meta property="og:title" content="LyScript AI - 赋能x64dbg的AI调试助手">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://lyscript.lyshark.com">
+    <meta property="og:description" content="LyScript AI：x32/x64dbg专属智能MCP组件，AI驱动分析、漏洞检测与恶意软件调查，让逆向工程、安全研究效率倍增">
+    <meta property="og:image" content="./logo.png">
+    <meta property="og:site_name" content="LyScript AI 官方网站">
+
+    <!-- Twitter卡片式分享优化 -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="LyScript AI - 赋能x64dbg的AI调试助手">
+    <meta name="twitter:description" content="AI驱动的x64dbg MCP组件，专注逆向工程、漏洞检测与恶意软件分析，加速安全研究进程">
+    <meta name="twitter:image" content="./logo.png">
+    <meta name="twitter:site" content="@LyScriptAI">
+
+    <!-- 爬虫优化标签 -->
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    <meta name="revisit-after" content="7 days">
+    <link rel="canonical" href="https://lyscript.lyshark.com">
+
+    <!-- 结构化数据 (Schema.org) -->
+    <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "LyScript AI",
+    "description": "面向x32/x64dbg的智能MCP组件，通过AI驱动的分析、漏洞检测和恶意软件调查功能，加速逆向工程、漏洞挖掘与安全研究进程",
+    "version": "2.0.0",
+    "author": {
+        "@type": "Organization",
+        "name": "LYSHARK Team",
+        "url": "https://lyscript.lyshark.com/"
+    },
+    "softwareVersion": "2.0.0",
+    "releaseNotes": "支持32/64位智能化动态调试，新增AI驱动漏洞检测与恶意软件分析模块，优化逆向工程工作流",
+    "publisher": {
+        "@type": "Organization",
+        "name": "LyScript官方",
+        "url": "https://lyscript.lyshark.com/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://lyscript.lyshark.com/logo.png"
+        }
+    },
+    "applicationCategory": "开发工具",
+    "applicationSubCategory": "调试工具、安全工具",
+    "operatingSystem": "Windows",
+    "url": "https://lyscript.lyshark.com/",
+    "features": [
+        "x32/x64dbg适配",
+        "AI驱动逆向分析",
+        "漏洞智能检测",
+        "恶意软件调查",
+        "MCP组件扩展"
+    ],
+    "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "CNY",
+        "availability": "https://schema.org/InStock"
+    }
+    }
+    </script>
+
+    <!-- 引入Tailwind CSS -->
+    <script src="./tailwindcss.css"></script>
+    <!-- 引入Font Awesome图标 -->
+    <link href="./font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- 配置Tailwind自定义主题 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF', // 主色调：科技蓝
+                        secondary: '#36D399', // 辅助色：亮绿
+                        dark: '#0F172A', // 深色背景
+                        darker: '#090E1A', // 更深背景
+                        light: '#F8FAFC', // 浅色文字
+                        muted: '#94A3B8', // 次要文字
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            }
+            .card-hover {
+                transition: all 0.3s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px -5px rgba(22, 93, 255, 0.3);
+            }
+            .gradient-overlay {
+                background: linear-gradient(180deg, rgba(15,23,42,0) 0%, rgba(15,23,42,1) 100%);
+            }
+            .nav-link {
+                @apply relative text-white hover:text-secondary transition-colors duration-300 font-medium;
+            }
+            .nav-link::after {
+                @apply content-[''] absolute w-0 h-0.5 bg-secondary left-0 -bottom-1 transition-all duration-300;
+            }
+            .nav-link:hover::after {
+                @apply w-full;
+            }
+            .footer-link {
+                @apply text-muted hover:text-secondary transition-colors duration-200;
+            }
+        }
+    </style>
+    <!-- 引入Google字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="font-inter bg-dark text-light antialiased">
+    <!-- 导航栏 - 透明化设计 -->
+    <header id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-transparent backdrop-blur-md">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="#home" class="text-2xl font-bold text-primary flex items-center group">
+                        <img 
+                            src="./logo.png"
+                            alt="Logo Icon" 
+                            class="w-10 h-10 mr-2 text-secondary group-hover:rotate-12 transition-transform duration-300"
+                            style="object-fit: contain;"
+                        >
+                        LyScript
+                    </a>
+                </div>
+
+                <!-- 桌面端导航 - 展开式设计 -->
+                <nav class="hidden md:flex items-center space-x-1">
+                    <div class="relative group">
+                        <a href="#home" class="nav-link px-4 py-2 flex items-center">
+                            首页
+                        </a>
+                    </div>
+                    <div class="relative group">
+                        <a href="#features" class="nav-link px-4 py-2 flex items-center">
+                            核心功能
+                        </a>
+                    </div>
+                    <div class="relative group">
+                        <a href="#advantages" class="nav-link px-4 py-2 flex items-center">
+                            核心优势
+                        </a>
+                    </div>
+                    <div class="relative group">
+                        <a href="#installation" class="nav-link px-4 py-2 flex items-center">
+                            安装指南
+                        </a>
+                    </div>
+                    <div class="relative group">
+                        <a href="#scenarios" class="nav-link px-4 py-2 flex items-center">
+                            适用场景
+                        </a>
+                    </div>
+                    <div class="relative group">
+                        <a href="#copyright" class="nav-link px-4 py-2 flex items-center">
+                            联系我们
+                        </a>
+                    </div>
+                </nav>
+
+        <!-- 移动端菜单按钮 -->
+        <div class="md:hidden">
+            <button id="menu-toggle" class="text-white hover:text-secondary focus:outline-none p-2">
+                <i class="fa fa-bars text-xl transition-transform duration-300" id="menu-icon"></i>
+            </button>
+        </div>
+        </div>
+
+        <!-- 移动端导航菜单 - 仅保留电脑端一级菜单 -->
+        <div id="mobile-menu" class="md:hidden bg-transparent backdrop-blur-md border-b border-primary/20 overflow-hidden max-h-0 transition-all duration-500 ease-in-out hidden">
+            <div class="container mx-auto px-4 py-3 space-y-1">
+                <a href="#home" class="block text-white hover:text-secondary transition-colors duration-200 font-medium py-3 px-4 rounded-lg hover:bg-primary/10">首页</a>
+                <a href="#features" class="block text-white hover:text-secondary transition-colors duration-200 font-medium py-3 px-4 rounded-lg hover:bg-primary/10">核心功能</a>
+                <a href="#advantages" class="block text-white hover:text-secondary transition-colors duration-200 font-medium py-3 px-4 rounded-lg hover:bg-primary/10">核心优势</a>
+                <a href="#installation" class="block text-white hover:text-secondary transition-colors duration-200 font-medium py-3 px-4 rounded-lg hover:bg-primary/10">安装指南</a>
+                <a href="#scenarios" class="block text-white hover:text-secondary transition-colors duration-200 font-medium py-3 px-4 rounded-lg hover:bg-primary/10">适用场景</a>
+                <a href="#copyright" class="block text-white hover:text-secondary transition-colors duration-200 font-medium py-3 px-4 rounded-lg hover:bg-primary/10">关于我们</a>
+                
+                <a href="#installation" class="block bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 text-center mt-2">
+                    <i class="fa fa-download mr-2"></i> 立即安装
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 英雄区 - 调整内边距适配透明导航 -->
+    <section id="home" class="pt-40 pb-20 md:pt-48 md:pb-28 relative overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-gradient-to-b from-primary/10 to-darker"></div>
+            <!-- 背景装饰 -->
+            <div class="absolute top-20 left-10 w-64 h-64 rounded-full bg-primary/5 blur-3xl"></div>
+            <div class="absolute bottom-10 right-10 w-80 h-80 rounded-full bg-secondary/5 blur-3xl"></div>
+        </div>
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="max-w-3xl mx-auto text-center">
+                <h1 class="text-[clamp(2.5rem,5vw,4rem)] font-bold leading-tight text-shadow mb-6">
+                    让 <span class="text-primary">AI</span> 赋能调试<br>
+                    让自动化解放双手
+                </h1>
+                <p class="text-[clamp(1rem,2vw,1.25rem)] text-muted mb-10 leading-relaxed">
+                    LyScript AI - 专为x64dbg打造的AI驱动调试助手，助力逆向工程、漏洞挖掘、恶意软件分析效率倍增，是您的智能副驾。
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="#installation" class="bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-300 shadow-lg shadow-primary/20 flex items-center justify-center hover:shadow-primary/30">
+                        <i class="fa fa-download mr-2"></i> 立即安装
+                    </a>
+                    <a href="#features" class="bg-transparent border-2 border-secondary hover:bg-secondary/10 text-secondary font-semibold py-3 px-8 rounded-lg transition-all duration-300 flex items-center justify-center">
+                        <i class="fa fa-list-ul mr-2"></i> 查看功能
+                    </a>
+                </div>
+            </div>
+
+            <!-- 技术栈标签 -->
+            <div class="max-w-4xl mx-auto mt-16 flex flex-wrap justify-center gap-4">
+                <span class="bg-darker/70 border border-primary/20 text-muted px-4 py-2 rounded-full text-sm flex items-center backdrop-blur-sm">
+                    <i class="fa fa-bug mr-2 text-primary"></i> 调试器集成
+                </span>
+                <span class="bg-darker/70 border border-primary/20 text-muted px-4 py-2 rounded-full text-sm flex items-center backdrop-blur-sm">
+                    <i class="fa fa-group mr-2 text-primary"></i> 人工智能辅助分析
+                </span>
+                <span class="bg-darker/70 border border-primary/20 text-muted px-4 py-2 rounded-full text-sm flex items-center backdrop-blur-sm">
+                    <i class="fa fa-shield mr-2 text-primary"></i> 恶意软件分析
+                </span>
+                <span class="bg-darker/70 border border-primary/20 text-muted px-4 py-2 rounded-full text-sm flex items-center backdrop-blur-sm">
+                    <i class="fa fa-bolt mr-2 text-primary"></i> 实时调试
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 核心功能模块 -->
+    <section id="features" class="py-20 bg-darker relative">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold mb-4">核心功能模块</h2>
+                <p class="text-muted max-w-2xl mx-auto">覆盖逆向工程全流程需求，从基础调试到高级分析，全方位满足安全从业者需求</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 功能卡片1 -->
+                <div class="bg-dark/80 backdrop-blur-sm border border-primary/20 rounded-xl p-6 card-hover">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa fa-play-circle text-primary text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">调试控制自动化</h3>
+                    <ul class="text-muted space-y-2">
+                        <li class="flex items-start">
+                            <i class="fa fa-check text-secondary mt-1 mr-2"></i>
+                            <span>程序执行、暂停、单步调试（F7/F8）</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check text-secondary mt-1 mr-2"></i>
+                            <span>断点管理（设置/删除/禁用）</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check text-secondary mt-1 mr-2"></i>
+                            <span>远程动态调试支持</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check text-secondary mt-1 mr-2"></i>
+                            <span>批量样本自动化执行与行为捕获</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 功能卡片2 -->
+                <div class="bg-dark/80 backdrop-blur-sm border border-primary/20 rounded-xl p-6 card-hover">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa fa-microchip text-primary text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">寄存器与标志位操作</h3>
+                    <ul class="text-muted space-y-2">
+                        <li class="flex items-start">
+                            <i class="fa fa-check text-secondary mt-1 mr-2"></i>
+                            <span>实时读取/修改CPU寄存器值</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check text-secondary mt-1 mr-2"></i>
+                            <span>标志位状态查询与修改</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check text-secondary mt-1 mr-2"></i>
+                            <span>脚本化控制寄存器上下文</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check text-secondary mt-1 mr-2"></i>
+                            <span>漏洞利用场景验证支持</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 功能卡片3 -->
+                <div class="bg-dark/80 backdrop-blur-sm border border-primary/20 rounded-xl p-6 card-hover">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa fa-code text-primary text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">反汇编与汇编支持</h3>
+                    <ul class="text-muted space-y-2">
+                        <li class="flex items-start">
+                            <i class="fa fa-check text-secondary mt-1 mr-2"></i>
+                            <span>指令级反汇编解析</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check text-secondary mt-1 mr-2"></i>
+                            <span>机器码与汇编指令双向转换</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check text-secondary mt-1 mr-2"></i>
+                            <span>脚本化批量修改指令</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check text-secondary mt-1 mr-2"></i>
+                            <span>快速构建调试用例</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 功能卡片4 -->
+                <div class="bg-dark/80 backdrop-blur-sm border border-primary/20 rounded-xl p-6 card-hover">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa fa-cubes text-primary text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">模块与进程管理</h3>
+                    <ul class="text-muted space-y-2">
+                        <li class="flex items-start">
+                            <i class="fa fa-check text-secondary mt-1 mr-2"></i>
+                            <span>枚举进程模块、获取模块基址</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check text-secondary mt-1 mr-2"></i>
+                            <span>导出表/导入表解析</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check text-secondary mt-1 mr-2"></i>
+                            <span>进程内存布局可视化</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check text-secondary mt-1 mr-2"></i>
+                            <span>关键模块快速定位</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 功能卡片5 -->
+                <div class="bg-dark/80 backdrop-blur-sm border border-primary/20 rounded-xl p-6 card-hover">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa fa-database text-primary text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">内存操作与扫描</h3>
+                    <ul class="text-muted space-y-2">
+                        <li class="flex items-start">
+                            <i class="fa fa-check text-secondary mt-1 mr-2"></i>
+                            <span>内存读写、数据搜索</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check text-secondary mt-1 mr-2"></i>
+                            <span>内存保护属性（RWX）修改</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check text-secondary mt-1 mr-2"></i>
+                            <span>恶意代码内存注入检测</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check text-secondary mt-1 mr-2"></i>
+                            <span>敏感内存区域监控</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 功能卡片6 -->
+                <div class="bg-dark/80 backdrop-blur-sm border border-primary/20 rounded-xl p-6 card-hover">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa fa-tasks text-primary text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">自动化脚本批量执行</h3>
+                    <ul class="text-muted space-y-2">
+                        <li class="flex items-start">
+                            <i class="fa fa-check text-secondary mt-1 mr-2"></i>
+                            <span>批量运行调试脚本</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check text-secondary mt-1 mr-2"></i>
+                            <span>支持任务编排与逻辑复用</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check text-secondary mt-1 mr-2"></i>
+                            <span>集成PyPI生态系统</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check text-secondary mt-1 mr-2"></i>
+                            <span>调用数据分析、可视化库</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 核心优势 -->
+    <section id="advantages" class="py-20 relative">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-gradient-to-b from-darker to-dark"></div>
+            <!-- 背景装饰 -->
+            <div class="absolute top-40 right-20 w-72 h-72 rounded-full bg-primary/5 blur-3xl"></div>
+            <div class="absolute bottom-20 left-20 w-60 h-60 rounded-full bg-secondary/5 blur-3xl"></div>
+        </div>
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold mb-4">产品核心优势</h2>
+                <p class="text-muted max-w-2xl mx-auto">技术创新与实用主义结合，打造高效、智能、易用的调试自动化工具</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 优势卡片1 -->
+                <div class="bg-darker/80 backdrop-blur-sm border border-primary/20 rounded-xl p-6 card-hover">
+                    <div class="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mb-5">
+                        <i class="fa fa-rocket text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Python</h3>
+                    <p class="text-muted">依托Python丰富第三方库，通过JSON数组转换实现调试器无缝集成，脚本开发高效灵活，支持快速定制化开发。</p>
+                </div>
+
+                <!-- 优势卡片2 -->
+                <div class="bg-darker/80 backdrop-blur-sm border border-primary/20 rounded-xl p-6 card-hover">
+                    <div class="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mb-5">
+                        <i class="fa fa-sitemap text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">零依赖部署</h3>
+                    <p class="text-muted">开箱即用，无需额外安装冗余组件，快速启动调试自动化工作流，降低使用门槛，提升开发效率。</p>
+                </div>
+
+                <!-- 优势卡片3 -->
+                <div class="bg-darker/80 backdrop-blur-sm border border-primary/20 rounded-xl p-6 card-hover">
+                    <div class="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mb-5">
+                        <i class="fa fa-plug text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">原生深度集成</h3>
+                    <p class="text-muted">全面支持x64dbg原生脚本，可自定义函数组合，适配高级调试场景，与调试器功能无缝衔接。</p>
+                </div>
+
+                <!-- 优势卡片4 -->
+                <div class="bg-darker/80 backdrop-blur-sm border border-primary/20 rounded-xl p-6 card-hover">
+                    <div class="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mb-5">
+                        <i class="fa fa-group text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">AI 辅助分析</h3>
+                    <p class="text-muted">机器学习驱动的智能模式识别，自动化复杂逆向任务，识别可疑代码段，生成调试脚本，降低人工门槛。</p>
+                </div>
+
+                <!-- 优势卡片5 -->
+                <div class="bg-darker/80 backdrop-blur-sm border border-primary/20 rounded-xl p-6 card-hover">
+                    <div class="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mb-5">
+                        <i class="fa fa-bolt text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">实时调试反馈</h3>
+                    <p class="text-muted">即时响应调试操作，自动生成测试用例，加速漏洞挖掘进程，提供高效的调试反馈循环。</p>
+                </div>
+
+                <!-- 优势卡片6 -->
+                <div class="bg-darker/80 backdrop-blur-sm border border-primary/20 rounded-xl p-6 card-hover">
+                    <div class="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mb-5">
+                        <i class="fa fa-shield text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">恶意软件洞察</h3>
+                    <p class="text-muted">高级行为分析引擎，精准识别混淆代码，提取恶意行为模式，助力恶意软件快速分析与溯源。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 安装指南 -->
+    <section id="installation" class="py-20 bg-darker">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold mb-4">快速安装指南</h2>
+                <p class="text-muted max-w-2xl mx-auto">三步完成安装，兼容所有版本x64dbg，上手简单高效</p>
+            </div>
+
+            <div class="max-w-4xl mx-auto bg-dark/80 backdrop-blur-sm border border-primary/20 rounded-xl overflow-hidden">
+                <!-- 安装步骤 -->
+                <div class="p-8">
+                    <div class="space-y-12">
+                        <!-- 步骤1 -->
+                        <div class="flex flex-col md:flex-row gap-6">
+                            <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                                <span class="text-primary font-bold text-xl">1</span>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold mb-3">准备 x64dbg 调试器</h3>
+                                <p class="text-muted mb-4">下载并安装 x64dbg（32/64位均可，无需特定版本），若已安装可直接跳过此步骤。</p>
+                                <a href="https://sourceforge.net/projects/x64dbg/files/snapshots/snapshot_2025-08-19_19-40.zip/download" target="_blank" class="inline-flex items-center text-primary hover:text-primary/80 transition-colors">
+                                    <i class="fa fa-external-link mr-2"></i> 点击直接下载（2025-08-19_19-40.zip）
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- 步骤2 -->
+                        <div class="flex flex-col md:flex-row gap-6">
+                            <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                                <span class="text-primary font-bold text-xl">2</span>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold mb-3">安装插件文件</h3>
+                                <p class="text-muted mb-4">下载 LyScript 插件压缩包，解压后根据调试器位数选择对应文件。</p>
+                                <ul class="text-muted space-y-3 mb-4">
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                                        <span><strong>32位调试器</strong>：将 <code class="bg-darker px-2 py-1 rounded text-sm">x86</code> 文件夹内所有文件拖拽至调试器安装目录的 <code class="bg-darker px-2 py-1 rounded text-sm">plugins</code> 文件夹</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                                        <span><strong>64位调试器</strong>：将 <code class="bg-darker px-2 py-1 rounded text-sm">x64</code> 文件夹内所有文件拖拽至调试器安装目录的 <code class="bg-darker px-2 py-1 rounded text-sm">plugins</code> 文件夹</span>
+                                    </li>
+                                </ul>
+                                    <a href="./down/LyScript.zip" class="inline-flex items-center text-primary hover:text-primary/80 transition-colors mr-6"> <!-- 加mr-6 -->
+                                        <i class="fa fa-download mr-2"></i> 点击下载LyScript MCP组件包（2025年12月28日）
+                                    </a>
+                            </div>
+                        </div>
+
+                        <!-- 步骤3 -->
+                        <div class="flex flex-col md:flex-row gap-6">
+                            <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                                <span class="text-primary font-bold text-xl">3</span>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold mb-3">安装 Python 依赖包</h3>
+                                <p class="text-muted mb-4">首先需要关闭自身防火墙，接着终端执行以下命令安装（建议同时安装32/64位包）。</p>
+                                <div class="bg-darker border border-primary/30 rounded-lg p-4 mb-4 overflow-x-auto">
+                                    <pre class="text-light text-sm"><code># 安装32位调试器依赖
+CMD> pip install x32dbg x64dbg asyncio
+
+# 安装FastMCP服务
+CMD> pip install fastmcp==2.13.1
+
+# 验证安装成功
+CMD> pip list</code></pre>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 安装成功提示 -->
+                <div class="bg-primary/10 border-t border-primary/20 p-6">
+                    <div class="flex items-start">
+                        <i class="fa fa-info-circle text-primary text-xl mt-1 mr-3"></i>
+                        <div>
+                            <h4 class="font-semibold text-light mb-1">安装完成！</h4>
+                            <p class="text-muted text-sm">现在可以启动 x64dbg，通过 Python 脚本调用 LyScript API 进行自动化调试了。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 适用场景 -->
+    <section id="scenarios" class="py-20 relative">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-gradient-to-b from-dark to-darker"></div>
+            <!-- 背景装饰 -->
+            <div class="absolute top-20 left-20 w-64 h-64 rounded-full bg-primary/5 blur-3xl"></div>
+            <div class="absolute bottom-40 right-20 w-72 h-72 rounded-full bg-secondary/5 blur-3xl"></div>
+        </div>
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold mb-4">适用场景与人群</h2>
+                <p class="text-muted max-w-2xl mx-auto">无论是逆向工程师、漏洞分析师还是恶意软件研究员，LyScript 都能满足你的需求</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- 场景卡片1 -->
+                <div class="bg-darker/80 backdrop-blur-sm border border-primary/20 rounded-xl p-6 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fa fa-search text-primary"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">逆向工程师</h3>
+                    </div>
+                    <ul class="text-muted space-y-2">
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-secondary mt-1 mr-2"></i>
+                            <span>二进制样本高效逆向分析</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-secondary mt-1 mr-2"></i>
+                            <span>重复调试逻辑自动化脚本化</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-secondary mt-1 mr-2"></i>
+                            <span>定制化逆向工具快速开发</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-secondary mt-1 mr-2"></i>
+                            <span>批量样本逆向分析与对比</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 场景卡片2 -->
+                <div class="bg-darker/80 backdrop-blur-sm border border-primary/20 rounded-xl p-6 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fa fa-bug text-primary"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">漏洞分析师</h3>
+                    </div>
+                    <ul class="text-muted space-y-2">
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-secondary mt-1 mr-2"></i>
+                            <span>批量漏洞扫描与验证</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-secondary mt-1 mr-2"></i>
+                            <span>漏洞利用场景快速构建</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-secondary mt-1 mr-2"></i>
+                            <span>调试日志结构化分析</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-secondary mt-1 mr-2"></i>
+                            <span>漏洞触发条件自动化测试</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 场景卡片3 -->
+                <div class="bg-darker/80 backdrop-blur-sm border border-primary/20 rounded-xl p-6 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fa fa-user-secret text-primary"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">恶意软件分析师</h3>
+                    </div>
+                    <ul class="text-muted space-y-2">
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-secondary mt-1 mr-2"></i>
+                            <span>病毒样本行为自动化捕获</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-secondary mt-1 mr-2"></i>
+                            <span>混淆代码识别与还原</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-secondary mt-1 mr-2"></i>
+                            <span>恶意行为模式提取与分析</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-secondary mt-1 mr-2"></i>
+                            <span>批量恶意样本分类与溯源</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 场景卡片4 -->
+                <div class="bg-darker/80 backdrop-blur-sm border border-primary/20 rounded-xl p-6 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fa fa-code text-primary"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">安全研发工程师</h3>
+                    </div>
+                    <ul class="text-muted space-y-2">
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-secondary mt-1 mr-2"></i>
+                            <span>调试器二次开发与扩展</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-secondary mt-1 mr-2"></i>
+                            <span>自动化测试工具构建</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-secondary mt-1 mr-2"></i>
+                            <span>AI分析模块集成与扩展</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-secondary mt-1 mr-2"></i>
+                            <span>安全工具链整合与优化</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 改进版展开式页脚 -->
+    <footer id="copyright" class="bg-darker border-t border-primary/20 pt-16 pb-8">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- 页脚上部 - 展开式布局 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+               <!-- 产品信息 -->
+                <div>
+                    <div class="text-2xl font-bold text-primary flex items-center mb-6 group">
+                        <img 
+                            src="./logo.png"
+                            alt="LyScript AI Logo" 
+                            class="w-12 h-12 mr-2 text-secondary group-hover:rotate-12 transition-transform duration-300"
+                            style="object-fit: contain;"
+                        >
+                        LyScript
+                    </div>
+                    <p class="text-muted mb-6">一款面向x32/x64dbg的智能MCP组件，通过AI驱动的分析、漏洞检测和恶意软件调查功能加速逆向工程进程，助力逆向工程、漏洞挖掘、恶意软件分析效率倍增。</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-dark border border-primary/20 flex items-center justify-center text-muted hover:bg-primary/10 hover:text-primary transition-all duration-300">
+                            <i class="fa fa-github"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-dark border border-primary/20 flex items-center justify-center text-muted hover:bg-primary/10 hover:text-primary transition-all duration-300">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-dark border border-primary/20 flex items-center justify-center text-muted hover:bg-primary/10 hover:text-primary transition-all duration-300">
+                            <i class="fa fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-dark border border-primary/20 flex items-center justify-center text-muted hover:bg-primary/10 hover:text-primary transition-all duration-300">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 快速链接 - 展开式 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-6 flex items-center">
+                        <i class="fa fa-link text-secondary mr-2"></i>快速链接
+                    </h3>
+                    <ul class="space-y-3">
+                        <li><a href="#home" class="footer-link">首页</a></li>
+                        <li><a href="#features" class="footer-link">核心功能</a></li>
+                        <li><a href="#advantages" class="footer-link">核心优势</a></li>
+                        <li><a href="#installation" class="footer-link">安装指南</a></li>
+                        <li><a href="#scenarios" class="footer-link">适用场景</a></li>
+                    </ul>
+                </div>
+
+                <!-- 资源中心 - 展开式 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-6 flex items-center">
+                        <i class="fa fa-book text-secondary mr-2"></i>资源中心
+                    </h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="footer-link">使用教程</a></li>
+                        <li><a href="#" class="footer-link">开发文档</a></li>
+                        <li><a href="#" class="footer-link">示例脚本</a></li>
+                        <li><a href="#" class="footer-link">常见问题</a></li>
+                        <li><a href="#" class="footer-link">视频教程</a></li>
+                    </ul>
+                </div>
+
+                <!-- 联系我们 - 展开式 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-6 flex items-center">
+                        <i class="fa fa-envelope text-secondary mr-2"></i>联系我们
+                    </h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fa fa-envelope text-muted mt-1 mr-3"></i>
+                            <span class="text-muted">admin@lyshark.com</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-github text-muted mt-1 mr-3"></i>
+                            <span class="text-muted">github.com/lyshark/lyscript</span>
+                        </li>
+                    </ul>
+                    
+                    <!-- 订阅区域 -->
+                    <div class="mt-8">
+                        <h4 class="font-medium mb-3">订阅更新</h4>
+                        <div class="flex">
+                            <input type="email" placeholder="您的邮箱地址" class="bg-dark border border-primary/30 rounded-l-lg px-4 py-2 w-full focus:outline-none focus:border-primary transition-colors text-sm">
+                            <button class="bg-primary hover:bg-primary/90 text-white px-4 rounded-r-lg transition-colors">
+                                <i class="fa fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 页脚底部 -->
+            <div class="border-t border-primary/10 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="text-muted text-sm mb-4 md:mb-0">
+                        &copy; 2025 LyScript AI. 保留所有权利 | 版权局登记号：2023R11L0359520、2024SR1010782
+                    </div>
+                    <div class="flex flex-wrap justify-center gap-4 text-sm">
+                        <a href="#" class="footer-link">隐私政策</a>
+                        <a href="#" class="footer-link">使用条款</a>
+                        <a href="#" class="footer-link">开源协议</a>
+                        <a href="#" class="footer-link">Cookie政策</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 导航和页脚交互脚本 -->
+    <script>
+        // 导航栏滚动效果（优化透明导航）
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-darker/70');
+                navbar.classList.add('shadow-lg');
+                navbar.classList.add('shadow-primary/10');
+            } else {
+                navbar.classList.remove('bg-darker/70');
+                navbar.classList.remove('shadow-lg');
+                navbar.classList.remove('shadow-primary/10');
+            }
+        });
+
+        // 移动端菜单切换（简化版，无子类菜单逻辑）
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+
+        menuToggle.addEventListener('click', function() {
+            if (mobileMenu.classList.contains('hidden')) {
+                // 显示菜单：移除hidden类 + 触发动画
+                mobileMenu.classList.remove('hidden');
+                void mobileMenu.offsetWidth; // 强制DOM重绘，确保动画生效
+                mobileMenu.style.maxHeight = mobileMenu.scrollHeight + 'px';
+                menuIcon.classList.add('rotate-90');
+            } else {
+                // 隐藏菜单：动画结束后添加hidden类
+                mobileMenu.style.maxHeight = '0';
+                menuIcon.classList.remove('rotate-90');
+                mobileMenu.addEventListener('transitionend', function handler() {
+                    if (mobileMenu.style.maxHeight === '0px') {
+                        mobileMenu.classList.add('hidden');
+                    }
+                    mobileMenu.removeEventListener('transitionend', handler);
+                }, { once: true });
+            }
+        });
+
+        // 平滑滚动 + 点击菜单后关闭菜单
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                // 关闭移动菜单（如果打开）
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.style.maxHeight = '0';
+                    menuIcon.classList.remove('rotate-90');
+                    mobileMenu.addEventListener('transitionend', function handler() {
+                        mobileMenu.classList.add('hidden');
+                        mobileMenu.removeEventListener('transitionend', handler);
+                    }, { once: true });
+                }
+                
+                // 跳转到目标位置
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // 点击页面其他区域关闭菜单（优化体验）
+        document.addEventListener('click', function(e) {
+            if (!menuToggle.contains(e.target) && !mobileMenu.contains(e.target)) {
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.style.maxHeight = '0';
+                    menuIcon.classList.remove('rotate-90');
+                    mobileMenu.addEventListener('transitionend', function handler() {
+                        mobileMenu.classList.add('hidden');
+                        mobileMenu.removeEventListener('transitionend', handler);
+                    }, { once: true });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
