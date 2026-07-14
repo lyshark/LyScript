@@ -1,0 +1,23 @@
+Metadata-Version: 2.1
+Name: x32dbg
+Version: 1.1.0
+Summary: An automated testing plugin developed for the x32dbg debugger, used to quickly build Python based test scripts to accelerate the development of exploit programs, assist in vulnerability mining, and analyze malware.
+Home-page: http://lyscript.lyshark.com
+Author: lyshark
+Author-email: me@lyshark.com
+License: MIT Licence
+Platform: any
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6.0
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+An automated testing plugin developed for the x32dbg debugger, used to quickly build Python based test scripts to accelerate the development of exploit programs, assist in vulnerability mining, and analyze malware.
+
+Copyright (c) 2009-2024 LyShark <me@lyshark.com>
+
+All rights reserved.
+
+For detailed copyright information see the file COPYING in the root of the distribution archive.
