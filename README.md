@@ -18,21 +18,21 @@ Secondly, you need to install the corresponding version of the Python package. O
 Microsoft Windows [12.0.0.0]
 (c) 2025 Microsoft Corporation。
 
-pip install x32dbg
+CMD > pip install x32dbg
 Collecting x32dbg
   Downloading x32dbg-2.0.0-py3-none-any.whl.metadata (1.3 kB)
 Downloading x32dbg-2.0.0-py3-none-any.whl (45 kB)
 Installing collected packages: x32dbg
 Successfully installed x32dbg-2.0.0
-
-pip install x64dbg
+ 
+CMD > pip install x64dbg
 Collecting x64dbg
   Downloading x64dbg-2.0.0-py3-none-any.whl.metadata (1.3 kB)
 Downloading x64dbg-2.0.0-py3-none-any.whl (45 kB)
 Installing collected packages: x64dbg
 Successfully installed x64dbg-2.0.0
 
-pip list
+CMD > pip list
 Package            Version
 ------------------ --------
 x32dbg             2.0.0
