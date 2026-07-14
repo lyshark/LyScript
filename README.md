@@ -1,9 +1,11 @@
 # LYSCRIPT Dynamic Debugging and Analysis Component
+
 <br>
 <div align=center>
 	<img width="20%" height="10%" alt="logo" src="https://github.com/user-attachments/assets/5b1af7e5-4216-4a6b-9c87-1bb0b876aa71" />
 </div>
 <br><br>
+<div align=center>
 
 [![Contributors](https://img.shields.io/github/contributors/lyshark/LyScript?color=2ea44f&logo=github)](https://github.com/lyshark/LyScript/graphs/contributors)
 [![Email Support](https://img.shields.io/badge/Contact-admin@lyshark.com-0099ff?logo=gmail)](mailto:admin@lyshark.com)
@@ -16,6 +18,8 @@
 [![GitHub Stars](https://img.shields.io/github/stars/lyshark/LyScript?style=social)](https://github.com/lyshark/LyScript/stargazers)
 [![GitHub Forks](https://img.shields.io/github/forks/lyshark/LyScript?style=social)](https://github.com/lyshark/LyScript/fork)
 [![License](https://img.shields.io/github/license/lyshark/LyScript)](https://github.com/lyshark/LyScript/blob/main/LICENSE)
+
+</div>
 
 LyScript is an automated debugging and reverse analysis plugin deeply customized for the x32/x64dbg debugger. It builds efficient debugging scripts with Python as its core, providing lightweight, programmable, and highly scalable debugging capabilities for security researchers, vulnerability developers, and malware analysts. Leveraging the powerful flexibility of the Python ecosystem and combining with the native capabilities of the debugger, the plugin achieves out-of-the-box functionality without relying on third-party dependencies. It also supports calling native scripts of x64dbg and custom combination functions, significantly enhancing work efficiency in scenarios such as vulnerability exploitation development, vulnerability mining, sample analysis, and reverse engineering.
 
