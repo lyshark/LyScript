@@ -1,0 +1,10 @@
+setup.py
+LyPeUtils/__init__.py
+LyPeUtils/fix_dmp_files.py
+LyPeUtils/pefile.py
+LyPeUtils/peutils.py
+LyPeUtils.egg-info/PKG-INFO
+LyPeUtils.egg-info/SOURCES.txt
+LyPeUtils.egg-info/dependency_links.txt
+LyPeUtils.egg-info/requires.txt
+LyPeUtils.egg-info/top_level.txt
