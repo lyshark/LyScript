@@ -64,11 +64,11 @@ fastmcp-slim       3.4.7
 CMD > cd ./MCP Server
 CMD > python main.py
 [*] Successfully initialized MCP service（ID：lyscript_mcp_server_cherry，Backend：fastmcp）
-Starting MCP server 'lyscript_mcp_server_cherry'
-Started server process [36m18620]
+Starting MCP server
+Started server process
 Waiting for application startup.
 Application startup complete.
-Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+Uvicorn running on http://127.0.0.1:8001/mcp (Press CTRL+C to quit)
 ```
 
 After everything is ready, run the `x32dbg` debugger and wait for the plugin to load successfully. Open the Python console, import the required modules, create a configuration object to specify the service address and port (default is 127.0.0.1:8000), and call the functional interface.
