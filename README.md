@@ -64,8 +64,7 @@ fastmcp-slim       3.4.7
 CMD > cd ./MCP Server
 CMD > python main.py
 [*] Successfully initialized MCP service（ID：lyscript_mcp_server_cherry，Backend：fastmcp）
-Starting MCP server 'lyscript_mcp_server_cherry' with transport           transport.py:361
-'streamable-http' on http://127.0.0.1:8001/mcp
+Starting MCP server 'lyscript_mcp_server_cherry'
 Started server process [36m18620]
 Waiting for application startup.
 Application startup complete.
