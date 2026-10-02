@@ -37,23 +37,29 @@ Microsoft Windows [12.0.0.0]
 
 CMD > pip install x32dbg
 Collecting x32dbg
-  Downloading x32dbg-2.0.0-py3-none-any.whl.metadata (1.3 kB)
-Downloading x32dbg-2.0.0-py3-none-any.whl (45 kB)
+  Downloading x32dbg-3.0.0-py3-none-any.whl.metadata (1.3 kB)
+Downloading x32dbg-3.0.0-py3-none-any.whl (200 kB)
 Installing collected packages: x32dbg
-Successfully installed x32dbg-2.0.0
- 
+Successfully installed x32dbg-3.0.0
+
 CMD > pip install x64dbg
 Collecting x64dbg
-  Downloading x64dbg-2.0.0-py3-none-any.whl.metadata (1.3 kB)
-Downloading x64dbg-2.0.0-py3-none-any.whl (45 kB)
+  Downloading x64dbg-3.0.0-py3-none-any.whl.metadata (1.3 kB)
+Downloading x64dbg-3.0.0-py3-none-any.whl (230 kB)
 Installing collected packages: x64dbg
-Successfully installed x64dbg-2.0.0
+Successfully installed x64dbg-3.0.0
+
+CMD > pip install fastmcp==3.4.7
+Collecting fastmcp==3.4.7
+  Downloading fastmcp-3.4.7-py3-none-any.whl.metadata (8.5 kB)
 
 CMD > pip list
 Package            Version
 ------------------ --------
-x32dbg             2.0.0
-x64dbg             2.0.0
+x32dbg             3.0.0
+x64dbg             3.0.0
+fastmcp                                  3.4.7
+fastmcp-slim                             3.4.7
 ```
 
 After everything is ready, run the `x32dbg` debugger and wait for the plugin to load successfully. Open the Python console, import the required modules, create a configuration object to specify the service address and port (default is 127.0.0.1:8000), and call the functional interface.
