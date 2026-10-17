@@ -2546,7 +2546,7 @@ public:
 				cJSON_AddNumberToObject(response.result.get(), "input_address_value", target_addr);
 				cJSON_AddStringToObject(response.result.get(), "input_address_hex", format_address(target_addr).c_str());
 				cJSON_AddNumberToObject(response.result.get(), "module_size_bytes", module_size);
-				cJSON_AddStringToObject(response.result.get(), "module_size_human", format_bytes(module_size).c_str()); // ¸¨Öúº¯Êý£º×ª»»ÎªKB/MB
+				cJSON_AddStringToObject(response.result.get(), "module_size_human", format_bytes(module_size).c_str()); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ÎªKB/MB
 				cJSON_AddStringToObject(response.result.get(), "note", "Size represents the total memory allocated for the module");
 			}
 			else
@@ -4359,7 +4359,7 @@ public:
 				cJSON_AddStringToObject(response.result.get(), "message", "Memory word read successfully");
 				cJSON_AddStringToObject(response.result.get(), "target_address_hex", format_address(target_addr).c_str());
 				cJSON_AddNumberToObject(response.result.get(), "read_value_decimal", static_cast<unsigned int>(read_value));
-				cJSON_AddStringToObject(response.result.get(), "read_value_hex", format_address(static_cast<unsigned int>(read_value), 4).c_str()); // ²¹ÁãÎª4Î»
+				cJSON_AddStringToObject(response.result.get(), "read_value_hex", format_address(static_cast<unsigned int>(read_value), 4).c_str()); // ï¿½ï¿½ï¿½ï¿½Îª4Î»
 				cJSON_AddStringToObject(response.result.get(), "data_type", "Word (2 bytes, unsigned 16-bit integer, 0-65535)");
 			}
 			else
@@ -5273,7 +5273,7 @@ public:
 		}
 
 		std::string cmd = "InitDebug " + params[0];
-		BOOL execResult = DbgCmdExec(cmd.c_str());
+		BOOL execResult = DbgCmdExecDirect(cmd.c_str());
 
 		if (execResult)
 		{
@@ -5301,7 +5301,7 @@ public:
 			return response;
 		}
 
-		BOOL CloseDbg = DbgCmdExec("StopDebug");
+		BOOL CloseDbg = DbgCmdExecDirect("StopDebug");
 
 		if (CloseDbg)
 		{
@@ -5327,7 +5327,7 @@ public:
 			return response;
 		}
 
-		BOOL DTDbg = DbgCmdExec("DetachDebugger");
+		BOOL DTDbg = DbgCmdExecDirect("DetachDebugger");
 
 		if (DTDbg)
 		{
