@@ -5272,7 +5272,7 @@ public:
 			return response;
 		}
 
-		std::string cmd = "InitDebug " + params[0];
+		std::string cmd = "InitDebug \"" + params[0] + "\"";
 		BOOL execResult = DbgCmdExec(cmd.c_str());
 
 		if (execResult)
